@@ -9,15 +9,15 @@
               android:label="fragment_work_time" tools:layout="@layout/fragment_work_time">
     </fragment>
     <fragment android:id="@+id/clockFragment" android:name="com.example.vitalii.yellowsjoblog.WorkTime.ClockFragment"
-              android:label="fragment_clock" tools:layout="@layout/fragment_clock"/>
+              android:label="Timer" tools:layout="@layout/fragment_clock"/>
     <fragment android:id="@+id/statsFragment" android:name="com.example.vitalii.yellowsjoblog.WorkTime.StatsFragment"
-              android:label="fragment_stats" tools:layout="@layout/fragment_stats"/>
+              android:label="Statistic" tools:layout="@layout/fragment_stats"/>
     <fragment android:id="@+id/reportsFragment" android:name="com.example.vitalii.yellowsjoblog.ReportsFragment"
-              android:label="fragment_reports" tools:layout="@layout/fragment_reports"/>
+              android:label="Reports" tools:layout="@layout/fragment_reports"/>
     <fragment android:id="@+id/projectsFragment" android:name="com.example.vitalii.yellowsjoblog.ProjectsFragment"
-              android:label="fragment_projects" tools:layout="@layout/fragment_projects"/>
+              android:label="Projects" tools:layout="@layout/fragment_projects"/>
     <fragment android:id="@+id/clientsFragment" android:name="com.example.vitalii.yellowsjoblog.ClientsFragment"
-              android:label="fragment_clients" tools:layout="@layout/fragment_clients"/>
+              android:label="Clients" tools:layout="@layout/fragment_clients"/>
     <fragment android:id="@+id/teamFragment" android:name="com.example.vitalii.yellowsjoblog.TeamFragment"
-              android:label="fragment_team" tools:layout="@layout/fragment_team"/>
+              android:label="Team" tools:layout="@layout/fragment_team"/>
 </navigation>

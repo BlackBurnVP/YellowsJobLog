@@ -20,12 +20,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.516"
-            app:layout_constraintVertical_bias="0.26" android:text="00:00:00"/>
+            app:layout_constraintHorizontal_bias="0.521"
+            app:layout_constraintVertical_bias="0.263"
+            android:text="0:00:00"
+            android:fontFamily="sans-serif"
+            app:fontFamily="@font/nunito_sans"/>
     <Button
             android:text="@string/start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="135dp"
+            android:layout_height="60dp"
             android:id="@+id/button"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
@@ -36,6 +39,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="sans-serif"
+            app:fontFamily="@font/nunito_sans" app:layout_constraintVertical_bias="0.581"
+            android:background="@color/gradienOne" android:textColor="@android:color/white" android:textStyle="bold"/>
 
 </android.support.constraint.ConstraintLayout>

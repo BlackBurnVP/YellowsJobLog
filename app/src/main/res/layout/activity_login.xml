@@ -10,7 +10,7 @@
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
+            android:id="@+id/img_logo"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
@@ -39,7 +39,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.715"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="#727cf5"
+            android:fontFamily="sans-serif"
+            app:fontFamily="@font/nunito_sans"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
     <android.support.design.widget.TextInputLayout
             android:layout_width="295dp"
             android:layout_height="wrap_content"
@@ -50,12 +55,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.306"
-            app:layout_constraintHorizontal_bias="0.505">
+            app:layout_constraintHorizontal_bias="0.505"
+            android:fontFamily="sans-serif"
+            app:fontFamily="@font/nunito_sans">
 
         <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login"
+                android:hint="@string/email"
                 android:id="@+id/txt_login"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
@@ -71,7 +78,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:fontFamily="sans-serif"
+            app:fontFamily="@font/nunito_sans">
 
         <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"

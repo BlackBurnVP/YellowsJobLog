@@ -18,11 +18,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var txtPassword:EditText
     private val KEY_EMAIL:String = ""
     private val KEY_PASSWORD:String = ""
-    private val LOGGED:String = ""
     lateinit var email:String
-    lateinit var pass:String
-    lateinit var sp:SharedPreferences
-    lateinit var ed:SharedPreferences.Editor
+    private lateinit var pass:String
+    private lateinit var sp:SharedPreferences
+    private lateinit var ed:SharedPreferences.Editor
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
