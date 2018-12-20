@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">YellowsJobLog</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="reports">Reports</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="navigation">Navigation</string>
+    <string name="manage">Manage</string>
+    <string name="projects">Projects</string>
+    <string name="clients">Clients</string>
+    <string name="team">Team</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+</resources>

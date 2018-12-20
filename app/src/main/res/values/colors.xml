@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#399e96</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="gradienOne">#5950e6</color>
+    <color name="gradienTwo">#27ca69</color>
+    <color name="page_indicator_default_color">#504c4c</color>
+    <color name="page_indicator_selected_color">#af8f0c</color>
+</resources>

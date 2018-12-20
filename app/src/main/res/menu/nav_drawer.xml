@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/navigation">
+        <menu>
+            <group android:id="@+id/first">
+                <item android:title="@string/dashboard" android:id="@+id/workTimeFragment" android:icon="@drawable/ic_meter" />
+                <item android:title="@string/reports" android:id="@+id/reportsFragment" android:icon="@drawable/ic_blog"/>
+            </group>
+        </menu>
+    </item>
+    <item android:title="@string/manage">
+        <menu>
+            <group android:id="@+id/second">
+                <item android:title="@string/projects" android:icon="@drawable/ic_pobrane"
+                      android:id="@+id/projectsFragment"/>
+                <item android:title="@string/clients" android:icon="@drawable/ic_user_id"
+                      android:id="@+id/clientsFragment"/>
+                <item android:title="@string/team" android:icon="@drawable/ic_user_group"
+                      android:id="@+id/teamFragment"/>
+            </group>
+        </menu>
+    </item>
+</menu>
