@@ -6,7 +6,7 @@
 
     <fragment android:id="@+id/workTimeFragment"
               android:name="com.example.vitalii.yellowsjoblog.WorkTime.WorkTimeFragment"
-              android:label="fragment_work_time" tools:layout="@layout/fragment_work_time">
+              android:label="Dashboard" tools:layout="@layout/fragment_work_time">
     </fragment>
     <fragment android:id="@+id/clockFragment" android:name="com.example.vitalii.yellowsjoblog.WorkTime.ClockFragment"
               android:label="Timer" tools:layout="@layout/fragment_clock"/>

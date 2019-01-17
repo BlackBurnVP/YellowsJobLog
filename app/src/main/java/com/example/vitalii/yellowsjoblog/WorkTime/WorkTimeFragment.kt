@@ -28,4 +28,6 @@ class WorkTimeFragment : Fragment() {
 //        mName.text = LoginActivity().email
         return view
     }
+
+    
 }
