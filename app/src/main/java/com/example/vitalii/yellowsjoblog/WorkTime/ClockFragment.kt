@@ -33,8 +33,8 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
     private lateinit var spinner: Spinner
     private lateinit var testRecycler:RecyclerView
     private lateinit var workDesc:EditText
-    private val data = Date()
-    val strDateFormat = "HH:mm:ss"
+    private lateinit var data:Date
+    val strDateFormat = "HH:mm"
     val dateFormat = SimpleDateFormat(strDateFormat)
     private var startTime:Long = 0
     private var seconds = 0
@@ -95,6 +95,7 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
 
         if(!startRun){
             startRun = true
+            data = Date()
             startTime = data.time
             start.text = getString(R.string.stop)
             ed.putLong("DATA(mills)",startTime).commit()
@@ -105,10 +106,12 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
                 val adapter =  StatsAdapter(stats)
                 testRecycler.adapter = adapter
                 startRun = false
+            data = Date()
+            var current = dateFormat.format(data)
+            var flow = "${dateFormat.format(startTime)} - $current"
                 ed.putString("TOTAL_TIME", txtTime.text.toString())
-                workDay.add(RecyclerData(workDesc.text.toString(),spinner.selectedItem.toString(),txtTime.text.toString()))
+                workDay.add(RecyclerData(workDesc.text.toString(),spinner.selectedItem.toString(),txtTime.text.toString(),flow))
                 for (item in workDay){
-
                     stats.addAll(workDay)
                     adapter.updateRecycler(workDay)
                 }

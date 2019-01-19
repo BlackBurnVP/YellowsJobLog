@@ -19,6 +19,7 @@ class StatsAdapter(private var stats:MutableList<RecyclerData>? = ArrayList()) :
         holder.workDesc.text = stat.desc
         holder.project.text = stat.project
         holder.totalTime.text = stat.time
+        holder.timeFlow.text = stat.timeFlow
     }
 
     override fun getItemCount(): Int {

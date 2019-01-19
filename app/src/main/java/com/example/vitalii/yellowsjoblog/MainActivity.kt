@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mNavView:NavigationView
     private lateinit var mNavController: NavController
-    private lateinit var mToolbar: Toolbar
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
