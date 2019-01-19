@@ -14,4 +14,12 @@
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="email">Email adress</string>
+    <string name="what_are_u_workin_on">What are you working on?</string>
+    <string-array name="projects_array">
+        <item>Bookworm</item>
+        <item>JobLog</item>
+        <item>Java</item>
+        <item>KIK-crm</item>
+        <item>Onboarding</item>
+    </string-array>
 </resources>

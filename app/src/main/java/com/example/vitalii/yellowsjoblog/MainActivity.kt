@@ -1,10 +1,13 @@
 package com.example.vitalii.yellowsjoblog
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -36,5 +39,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(mDrawerLayout,mNavController)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null){
+            val inputMethodManager = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
+            currentFocus.clearFocus()
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }
