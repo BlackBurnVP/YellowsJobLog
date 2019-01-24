@@ -1,4 +1,4 @@
-package com.example.vitalii.yellowsjoblog.WorkTime
+package com.example.vitalii.yellowsjoblog.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.vitalii.yellowsjoblog.R
+import com.example.vitalii.yellowsjoblog.WorkTime.RecyclerData
 
 class StatsAdapter(private var stats:MutableList<RecyclerData>? = ArrayList()) : RecyclerView.Adapter<StatsAdapter.ViewHolder>(){
 
@@ -33,7 +34,7 @@ class StatsAdapter(private var stats:MutableList<RecyclerData>? = ArrayList()) :
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var workDesc:TextView = itemView.findViewById(R.id.txt_workDesc) as TextView
+        var workDesc:TextView = itemView.findViewById(R.id.txt_Name) as TextView
         var project:TextView = itemView.findViewById(R.id.txt_projectName) as TextView
         var timeFlow:TextView = itemView.findViewById(R.id.txt_TimeFlow) as TextView
         var totalTime:TextView = itemView.findViewById(R.id.txt_resTime) as TextView

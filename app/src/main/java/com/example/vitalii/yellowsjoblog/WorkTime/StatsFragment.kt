@@ -9,11 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.SimpleExpandableListAdapter
 
 import com.example.vitalii.yellowsjoblog.R
-import android.widget.ExpandableListView
-
+import com.example.vitalii.yellowsjoblog.adapters.StatsAdapter
 
 
 class StatsFragment : Fragment() {
@@ -28,7 +26,7 @@ class StatsFragment : Fragment() {
     private lateinit var mRecyclerView:RecyclerView
     private lateinit var mRefresh:Button
 
-    var stats:ArrayList<RecyclerData> = ArrayList()
+    var stats:MutableList<RecyclerData> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_stats, container, false)
@@ -125,9 +123,28 @@ class StatsFragment : Fragment() {
         println(ClockFragment().stats)
 
 
-        for (item in ClockFragment().workDay){
-            stats.addAll(ClockFragment().workDay)
-            adapter.updateRecycler(ClockFragment().workDay)
-        }
+//        for (item in ClockFragment().workDay){
+//            stats.addAll(ClockFragment().workDay)
+//            adapter.updateRecycler(ClockFragment().workDay)
+//        }
     }
+
+//    fun getTasks(){
+//        val service = Retrofit.Builder()
+//            .baseUrl("http://joblog.yellows.pl/api/tasksapi")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//            .create(JobLogService::class.java)
+//        service.getReports()
+//            .enqueue(object :Callback<List<JobLogPOJO>>{
+//                override fun onResponse(call: Call<List<JobLogPOJO>>, response: Response<List<JobLogPOJO>>) {
+//                    stats.addAll(response.body()!!)
+//
+//                }
+//
+//                override fun onFailure(call: Call<List<JobLogPOJO>>, t: Throwable) {
+//                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//                }
+//            })
+//    }
 }

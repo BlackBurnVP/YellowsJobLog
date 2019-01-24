@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,8 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.vitalii.yellowsjoblog.R
-import kotlinx.android.synthetic.main.fragment_clock.*
-import kotlinx.android.synthetic.main.fragment_clock.view.*
+import com.example.vitalii.yellowsjoblog.adapters.MultiSelectSpinner
+import com.example.vitalii.yellowsjoblog.adapters.StatsAdapter
+import com.example.vitalii.yellowsjoblog.adapters.Users
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -58,7 +58,6 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
         spinner = view.findViewById(R.id.project_spinner)
         testRecycler = view.findViewById(R.id.stats_recycler)
         workDesc = view!!.findViewById(R.id.txt_work)
-
 
         stats = ArrayList()
 
@@ -103,12 +102,12 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
             //start.setOnLongClickListener {
                 val layoutManager = LinearLayoutManager(this.activity!!)
                 testRecycler.layoutManager = layoutManager
-                val adapter =  StatsAdapter(stats)
+                val adapter = StatsAdapter(stats)
                 testRecycler.adapter = adapter
                 startRun = false
             data = Date()
-            var current = dateFormat.format(data)
-            var flow = "${dateFormat.format(startTime)} - $current"
+            val current = dateFormat.format(data)
+            val flow = "${dateFormat.format(startTime)} - $current"
                 ed.putString("TOTAL_TIME", txtTime.text.toString())
                 workDay.add(RecyclerData(workDesc.text.toString(),spinner.selectedItem.toString(),txtTime.text.toString(),flow))
                 for (item in workDay){
@@ -147,6 +146,7 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
     private fun onTimerStop(){
         mHandler.removeCallbacks(mRunnable)
     }
+
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val item = parent!!.getItemAtPosition(position)
