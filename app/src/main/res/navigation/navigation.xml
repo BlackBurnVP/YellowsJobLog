@@ -5,15 +5,16 @@
             app:startDestination="@id/workTimeFragment">
 
     <fragment android:id="@+id/workTimeFragment"
-              android:name="com.example.vitalii.yellowsjoblog.WorkTime.WorkTimeFragment"
+              android:name="com.example.vitalii.yellowsjoblog.worktime.WorkTimeFragment"
               android:label="Dashboard" tools:layout="@layout/fragment_work_time">
     </fragment>
-    <fragment android:id="@+id/clockFragment" android:name="com.example.vitalii.yellowsjoblog.WorkTime.ClockFragment"
+    <fragment android:id="@+id/clockFragment" android:name="com.example.vitalii.yellowsjoblog.worktime.ClockFragment"
               android:label="Timer" tools:layout="@layout/fragment_clock"/>
-    <fragment android:id="@+id/statsFragment" android:name="com.example.vitalii.yellowsjoblog.WorkTime.StatsFragment"
+    <fragment android:id="@+id/statsFragment" android:name="com.example.vitalii.yellowsjoblog.worktime.StatsFragment"
               android:label="Statistic" tools:layout="@layout/fragment_stats"/>
     <fragment android:id="@+id/reportsFragment" android:name="com.example.vitalii.yellowsjoblog.ReportsFragment"
-              android:label="Reports" tools:layout="@layout/fragment_reports"/>
+              android:label="Reports" tools:layout="@layout/fragment_reports">
+    </fragment>
     <fragment android:id="@+id/projectsFragment" android:name="com.example.vitalii.yellowsjoblog.ProjectsFragment"
               android:label="Projects" tools:layout="@layout/fragment_projects"/>
     <fragment android:id="@+id/clientsFragment" android:name="com.example.vitalii.yellowsjoblog.ClientsFragment"

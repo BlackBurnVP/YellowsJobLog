@@ -1,4 +1,4 @@
-package com.example.vitalii.yellowsjoblog.WorkTime
+package com.example.vitalii.yellowsjoblog.worktime
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

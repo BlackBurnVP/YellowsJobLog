@@ -1,4 +1,4 @@
-package com.example.vitalii.yellowsjoblog.WorkTime
+package com.example.vitalii.yellowsjoblog.worktime
 
 
 import android.os.Bundle
@@ -8,8 +8,6 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.example.vitalii.yellowsjoblog.LoginActivity
 
 import com.example.vitalii.yellowsjoblog.R
 

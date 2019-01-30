@@ -11,9 +11,8 @@ import android.util.AttributeSet
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
-import com.example.vitalii.yellowsjoblog.WorkTime.ClockFragment
-import android.text.method.TextKeyListener.clear
-
+import com.example.vitalii.yellowsjoblog.api.ProjectsPOKO
+import com.example.vitalii.yellowsjoblog.api.Users
 
 
 /**
@@ -21,49 +20,61 @@ import android.text.method.TextKeyListener.clear
  * and the user presses it. This allows for the selection of more than one option.
  */
 class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
-    private var _itemsUsers:ArrayList<Users>? = null
-    private var _items: Array<String>? = null
-    private var _selection: BooleanArray? = null
+    private var _itemsUsers: Array<String>? = null
+    private var _itemsProjects:Array<String>? = null
+    private var _selectionUsers: BooleanArray? = null
+    private var _selectionProjects: BooleanArray? = null
     private var _proxyAdapter: ArrayAdapter<String>
     private var _title:String? = null
-    private val usersListOfID = ArrayList<Int>()
-    private var usersList = ArrayList<Users>()
-    private var projectsList = ArrayList<Projects>()
-    private val projectsListOfID = ArrayList<Int>()
+    val usersListOfID = ArrayList<Int>()
+    private var usersList:List<Users>? = null
+    private var projectsPOJOList:List<ProjectsPOKO>? = null
+    val projectsListOfID = ArrayList<Int>()
 
 
     /**
      * Add items to show in Spinner
      */
 
-    fun addUsers(userList:ArrayList<Users>){
-        usersList = userList
+    fun addUsers(newList:List<Users>){
+        usersList = newList
         val nameOfUsers = ArrayList<String>()
-        for(user in usersList){
-            nameOfUsers.add(user.name)
+        for(user in newList){
+            nameOfUsers.add(user.fullName!!)
         }
-        setItems(nameOfUsers)
+        setUsers(nameOfUsers)
     }
 
-    fun addProjects(projectList:ArrayList<Projects>){
-        projectsList = projectList
+    fun addProjects(newList:List<ProjectsPOKO>){
+        projectsPOJOList = newList
         val nameOfProjects = ArrayList<String>()
-        for(project in projectsList){
-            nameOfProjects.add(project.name)
+        for(project in newList){
+            nameOfProjects.add(project.name!!)
         }
-        setItems(nameOfProjects)
+        setProjects(nameOfProjects)
     }
 
         /**
          * Returns a list of strings, one for each selected item.
-     * @return
-     */
-    val selectedStrings: List<String>
+         * @return
+         */
+    val selectedUsers: List<String>
         get() {
             val selection = LinkedList<String>()
-            for (i in _items!!.indices) {
-                if (_selection!![i]) {
-                    selection.add(_items!![i])
+            for (i in _itemsUsers!!.indices) {
+                if (_selectionUsers!![i]) {
+                    selection.add(_itemsUsers!![i])
+                }
+            }
+            return selection
+        }
+
+    val selectedProjects: List<String>
+        get() {
+            val selection = LinkedList<String>()
+            for (i in _itemsProjects!!.indices) {
+                if (_selectionProjects!![i]) {
+                    selection.add(_itemsProjects!![i])
                 }
             }
             return selection
@@ -75,8 +86,8 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
     val selectedIndicies: List<Int>
         get() {
             val selection = LinkedList<Int>()
-            for (i in _items!!.indices) {
-                if (_selection!![i]) {
+            for (i in _itemsUsers!!.indices) {
+                if (_selectionUsers!![i]) {
                     selection.add(i)
                 }
             }
@@ -108,56 +119,67 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
      * {@inheritDoc}
      */
     override fun onClick(dialog: DialogInterface, which: Int, isChecked: Boolean) {
-        if (_selection != null && which < _selection!!.size) {
-            _selection!![which] = isChecked
-
-            var select: String? = null
-               if (selectedStrings.isNotEmpty()){
-                    for (user in usersList){
-                        val selectedUser = _items!![which]
-                        if (selectedUser == user.name){
-                            val userID:Int = user.id
-                            if (!usersListOfID.contains(userID)){
-                                println("Add new ID $userID in Array")
+        if (_selectionUsers != null && which < _selectionUsers!!.size) {
+            _selectionUsers!![which] = isChecked
+            //var select: String? = null
+            println("Selected users $selectedUsers")
+            if (selectedUsers.isNotEmpty()) {
+                if (usersList != null) {
+                    for (user in usersList!!) {
+                        val selectedUser = _itemsUsers!![which]
+                        if (selectedUser == user.fullName!!) {
+                            val userID: Int = user.id!!
+                            if (!usersListOfID.contains(userID)) {
+                                println("Add new user ID $userID in Array")
                                 usersListOfID.add(userID)
-                            };else{
-                                println("ID $userID is already in Array. Remove.")
+                            }; else {
+                                println("userID $userID is already in Array. Remove.")
                                 usersListOfID.remove(userID)
                             }
                         }
                     }
-                    for (project in projectsList){
-                        val selectedProject = _items!![which]
-                        if(selectedProject == project.name){
-                            val projectID = project.id
-                            if(!projectsListOfID.contains(projectID)){
-                                println("Add new project ID $projectID in Array")
-                                projectsListOfID.add(projectID)
-                            };else{
-                            println("ID $projectID is already in Array. Remove.")
-                            projectsListOfID.remove(projectID)
+                }
+                println("Selected users: $selectedUsers")
+            };else{
+                usersListOfID.clear()
+            }
+        }
+            if (_selectionProjects != null && which < _selectionProjects!!.size) {
+                _selectionProjects!![which] = isChecked
+                if(selectedProjects.isNotEmpty()) {
+                    println("selected projects $selectedProjects")
+                    if (projectsPOJOList != null) {
+                        for (project in this.projectsPOJOList!!) {
+                            val selectedProject = _itemsProjects!![which]
+                            if (selectedProject == project.name!!) {
+                                val projectID = project.id!!
+                                if (!projectsListOfID.contains(projectID)) {
+                                    //println("Selected strings $selectedProject")
+                                    println("Add new project ID $projectID in Array")
+                                    projectsListOfID.add(projectID)
+                                    setSelection(which)
+                                }; else {
+                                    println("ID $projectID is already in Array. Remove.")
+                                    projectsListOfID.remove(projectID)
+                                }
                             }
                         }
                     }
+                    println("Selected projects: $selectedProjects")
                 };else{
-                    usersListOfID.clear()
+                    projectsListOfID.clear()
                 }
-
-            println("Selected strings: $selectedStrings")
+            }
             println("Selected users IDs $usersListOfID")
+            println("Selected projects IDs $projectsListOfID")
+//            if (!isAnySelect())
+//                select = _title
+//            else
+//                select = buildSelectedItemString()
 
-
-            if (!isAnySelect())
-                select = _title
-            else
-                select = buildSelectedItemString()
-
-            _proxyAdapter.clear()
-            _proxyAdapter.add(select)
-            setSelection(0)
-        } else {
-            throw IllegalArgumentException("Argument 'which' is out of bounds.")
-        }
+//            _proxyAdapter.clear()
+//            _proxyAdapter.add(select)
+//            setSelection(0)
     }
 
     fun setTitle(title: String) {
@@ -168,7 +190,7 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
     }
 
     private fun isAnySelect(): Boolean {
-        for (b in _selection!!) {
+        for (b in _selectionUsers!!) {
             if (b) return true
         }
         return false
@@ -179,8 +201,16 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
      */
     override fun performClick(): Boolean {
         val builder = AlertDialog.Builder(context)
-        builder.setMultiChoiceItems(_items, _selection, this)
-        builder.show()
+        val builder2 = AlertDialog.Builder(context)
+
+        builder.setMultiChoiceItems(_itemsUsers, _selectionUsers, this)
+        builder2.setMultiChoiceItems(_itemsProjects, _selectionProjects, this)
+        if(_itemsUsers!=null){
+            builder.show()
+        }
+        if(_itemsProjects!=null){
+            builder2.show()
+        }
         return true
     }
 
@@ -196,86 +226,156 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
      * Sets the options for this spinner.
      * @param items
      */
-    fun setItems(items: Array<String>) {
-        _items = items
-        _selection = BooleanArray(_items!!.size)
-
-        Arrays.fill(_selection, false)
-    }
+//    fun setItems(items: Array<String>) {
+//        _items = items
+//        _selectionUsers = BooleanArray(_itemsUsers!!.size)
+//
+//        Arrays.fill(_selection, false)
+//    }
 
     /**
      * Sets the options for this spinner.
      * @param items
      */
-    fun setItems(items: List<String>) {
+    fun setUsers(items: List<String>) {
         //addItems()
-        _items = items.toTypedArray()
-        _selection = BooleanArray(_items!!.size)
+        _itemsUsers = items.toTypedArray()
+        _selectionUsers = BooleanArray(_itemsUsers!!.size)
 
-        Arrays.fill(_selection, false)
+        Arrays.fill(_selectionUsers, false)
+    }
+    fun setProjects(items: List<String>) {
+        //addItems()
+        _itemsProjects = items.toTypedArray()
+        _selectionProjects = BooleanArray(_itemsProjects!!.size)
+
+        Arrays.fill(_selectionProjects, false)
     }
 
     /**
      * Sets the selected options based on an array of string.
      * @param selection
      */
-    fun setSelection(selection: Array<String>) {
-        for (sel in selection) {
-            for (j in _items!!.indices) {
-                if (_items!![j] == sel) {
-                    _selection!![j] = true
-                }
-            }
-        }
-    }
+//    fun setSelection(selection: Array<String>) {
+//        for (sel in selection) {
+//            for (j in _items!!.indices) {
+//                if (_items!![j] == sel) {
+//                    _selection!![j] = true
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Sets the selected options based on a list of string.
      * @param selection
      */
-    fun setSelection(selection: List<String>) {
-        for (sel in selection) {
-            for (j in _items!!.indices) {
-                if (_items!![j] == sel) {
-                    _selection!![j] = true
-                }
-            }
-        }
-    }
+//    fun setSelection(selection: List<String>) {
+//        for (sel in selection) {
+//            for (j in _items!!.indices) {
+//                if (_items!![j] == sel) {
+//                    _selection!![j] = true
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Sets the selected options based on an array of positions.
      * @param selectedIndicies
      */
-    fun setSelection(selectedIndicies: IntArray) {
-        for (index in selectedIndicies) {
-            if (index >= 0 && index < _selection!!.size) {
-                _selection!![index] = true
-            } else {
-                throw IllegalArgumentException("Index $index is out of bounds.")
-            }
-        }
-    }
+//    fun setSelection(selectedIndicies: IntArray) {
+//        for (index in selectedIndicies) {
+//            if (index >= 0 && index < _selection!!.size) {
+//                _selection!![index] = true
+//            } else {
+//                throw IllegalArgumentException("Index $index is out of bounds.")
+//            }
+//        }
+//    }
 
     /**
      * Builds the string for display in the spinner.
      * @return comma-separated list of selected items
      */
-    private fun buildSelectedItemString(): String {
-        val sb = StringBuilder()
-        var foundOne = false
+//    private fun buildSelectedItemString(): String {
+//        val sb = StringBuilder()
+//        var foundOne = false
+//
+//        for (i in _items!!.indices) {
+//            if (_selectionUsers!![i]) {
+//                if (foundOne) {
+//                    sb.append(", ")
+//                }
+//                foundOne = true
+//
+//                sb.append(_items!![i])
+//            }
+//        }
+//
+//        return sb.toString()
+//    }
 
-        for (i in _items!!.indices) {
-            if (_selection!![i]) {
-                if (foundOne) {
-                    sb.append(", ")
-                }
-                foundOne = true
+    interface OnSpinnerEventsListener {
 
-                sb.append(_items!![i])
-            }
+        /**
+         * Callback triggered when the spinner was opened.
+         */
+        fun onSpinnerOpened(spinner: Spinner)
+
+        /**
+         * Callback triggered when the spinner was closed.
+         */
+        fun onSpinnerClosed(spinner: Spinner)
+
+    }
+
+    private var mListener: OnSpinnerEventsListener? = null
+    private var mOpenInitiated = false
+
+    // implement the Spinner constructors that you need
+
+//    override fun performClick(): Boolean {
+//        // register that the Spinner was opened so we have a status
+//        // indicator for when the container holding this Spinner may lose focus
+//        mOpenInitiated = true
+//        if (mListener != null) {
+//            mListener!!.onSpinnerOpened(this)
+//        }
+//        return super.performClick()
+//    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        if (hasBeenOpened() && hasFocus) {
+            performClosedEvent()
         }
+    }
 
-        return sb.toString()
+    /**
+     * Register the listener which will listen for events.
+     */
+    fun setSpinnerEventsListener(
+        onSpinnerEventsListener: OnSpinnerEventsListener
+    ) {
+        mListener = onSpinnerEventsListener
+    }
+
+    /**
+     * Propagate the closed Spinner event to the listener from outside if needed.
+     */
+    fun performClosedEvent() {
+        mOpenInitiated = false
+        if (mListener != null) {
+            mListener!!.onSpinnerClosed(this)
+        }
+    }
+
+    /**
+     * A boolean flag indicating that the Spinner triggered an open event.
+     *
+     * @return true for opened Spinner
+     */
+    fun hasBeenOpened(): Boolean {
+        return mOpenInitiated
     }
 }

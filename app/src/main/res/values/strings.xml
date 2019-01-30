@@ -13,8 +13,13 @@
     <string name="stop">Stop</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-    <string name="email">Email adress</string>
+    <string name="email">Email address</string>
     <string name="what_are_u_workin_on">What are you working on?</string>
+    <string name="users">Users</string>
+    <string name="filter">Filter</string>
+    <string name="active">Active</string>
+    <string name="not_active">Not Active</string>
+    <string name="yellows_logo">Yellows Logo</string>
     <string-array name="projects_array">
         <item>Bookworm</item>
         <item>JobLog</item>

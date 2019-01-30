@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.vitalii.yellowsjoblog.R
-import com.example.vitalii.yellowsjoblog.WorkTime.RecyclerData
+import com.example.vitalii.yellowsjoblog.api.ReportsPOKO
 
-class StatsAdapter(private var stats:MutableList<RecyclerData>? = ArrayList()) : RecyclerView.Adapter<StatsAdapter.ViewHolder>(){
+class StatsAdapter(private var reports:MutableList<ReportsPOKO>? = ArrayList()) : RecyclerView.Adapter<StatsAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.stat_view, parent, false)
@@ -16,20 +16,20 @@ class StatsAdapter(private var stats:MutableList<RecyclerData>? = ArrayList()) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val stat = stats!![position]
-        holder.workDesc.text = stat.desc
-        holder.project.text = stat.project
-        holder.totalTime.text = stat.time
-        holder.timeFlow.text = stat.timeFlow
+        val stat = reports!![position]
+        holder.workDesc.text = stat.name
+        holder.project.text = stat.projectName
+        holder.timeFlow.text = "${stat.hourstart}-${stat.hourend}"
+        holder.totalTime.text = stat.datestamp
     }
 
     override fun getItemCount(): Int {
-        return stats?.size ?:0
+        return reports?.size ?:0
     }
 
-    fun updateRecycler(newList: MutableList<RecyclerData>){
-        stats!!.clear()
-        stats!!.addAll(newList)
+    fun updateRecycler(newList: MutableList<ReportsPOKO>){
+        reports!!.clear()
+        reports!!.addAll(newList)
         notifyDataSetChanged()
     }
 

@@ -1,4 +1,4 @@
-package com.example.vitalii.yellowsjoblog.WorkTime
+package com.example.vitalii.yellowsjoblog.worktime
 
 
 import android.content.Context
@@ -13,9 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.vitalii.yellowsjoblog.R
-import com.example.vitalii.yellowsjoblog.adapters.MultiSelectSpinner
-import com.example.vitalii.yellowsjoblog.adapters.StatsAdapter
-import com.example.vitalii.yellowsjoblog.adapters.Users
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -34,16 +31,16 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
     private lateinit var testRecycler:RecyclerView
     private lateinit var workDesc:EditText
     private lateinit var data:Date
-    val strDateFormat = "HH:mm"
-    val dateFormat = SimpleDateFormat(strDateFormat)
+    private val strDateFormat = "HH:mm"
+    private val dateFormat = SimpleDateFormat(strDateFormat)
     private var startTime:Long = 0
     private var seconds = 0
     private var startRun = false
     private var hours = 0
     private var minutes = 0
     private var secs = 0
-    var stats:MutableList<RecyclerData> = ArrayList()
-    var workDay:MutableList<RecyclerData> = ArrayList()
+    private var stats:MutableList<RecyclerData> = ArrayList()
+    private var workDay:MutableList<RecyclerData> = ArrayList()
 
 
 
@@ -102,8 +99,8 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
             //start.setOnLongClickListener {
                 val layoutManager = LinearLayoutManager(this.activity!!)
                 testRecycler.layoutManager = layoutManager
-                val adapter = StatsAdapter(stats)
-                testRecycler.adapter = adapter
+                //val adapter = StatsAdapter(stats)
+                //testRecycler.adapter = adapter
                 startRun = false
             data = Date()
             val current = dateFormat.format(data)
@@ -111,8 +108,8 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
                 ed.putString("TOTAL_TIME", txtTime.text.toString())
                 workDay.add(RecyclerData(workDesc.text.toString(),spinner.selectedItem.toString(),txtTime.text.toString(),flow))
                 for (item in workDay){
-                    stats.addAll(workDay)
-                    adapter.updateRecycler(workDay)
+                    //stats.addAll(workDay)
+                    //adapter.updateRecycler(workDay)
                 }
 //                startTime = 0
 //                ed.putLong("DATA(Mills)",0L)
@@ -125,6 +122,9 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
         }
     }
 
+    /**
+     * Starting Work Time Timer
+     */
     private fun onTimerStart(){
         sp = this.activity!!.getSharedPreferences("TIMER",Context.MODE_PRIVATE)
         ed = sp.edit()
@@ -143,18 +143,28 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
         mHandler.postDelayed(mRunnable,1000)
     }
 
+    /**
+     * Stops Work Time Timer
+     */
+
     private fun onTimerStop(){
         mHandler.removeCallbacks(mRunnable)
     }
 
+    /**
+     * OnClickListener for spinner
+     */
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val item = parent!!.getItemAtPosition(position)
         Toast.makeText(activity!!,"Selected item is $item",Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * OnNothingClick for spinner
+     */
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
 //    fun getCurrentTimeUsingDate() {

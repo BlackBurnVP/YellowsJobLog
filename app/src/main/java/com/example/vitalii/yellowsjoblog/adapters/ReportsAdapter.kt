@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.vitalii.yellowsjoblog.R
-import com.example.vitalii.yellowsjoblog.api.JobLogPOJO
+import com.example.vitalii.yellowsjoblog.api.ReportsPOKO
 
 
-class ReportsAdapter(private var reports:MutableList<JobLogPOJO>? = ArrayList()) : RecyclerView.Adapter<ReportsAdapter.ViewHolder>(){
+class ReportsAdapter(private var reports:MutableList<ReportsPOKO>? = ArrayList()) : RecyclerView.Adapter<ReportsAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.reports_view, parent, false)
@@ -39,7 +39,7 @@ class ReportsAdapter(private var reports:MutableList<JobLogPOJO>? = ArrayList())
         return reports?.size ?:0
     }
 
-    fun updateRecycler(newList: MutableList<JobLogPOJO>){
+    fun updateRecycler(newList: MutableList<ReportsPOKO>){
         reports!!.clear()
         reports!!.addAll(newList)
         notifyDataSetChanged()

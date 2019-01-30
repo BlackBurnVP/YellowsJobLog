@@ -8,12 +8,9 @@ import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.example.vitalii.yellowsjoblog.WorkTime.ClockFragment
-import java.time.Clock
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
         NavigationUI.setupActionBarWithNavController(this,mNavController,mDrawerLayout)
         NavigationUI.setupWithNavController(mNavView,mNavController)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
