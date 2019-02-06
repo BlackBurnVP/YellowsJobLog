@@ -28,9 +28,9 @@ class ProjectsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_projects, container, false)
+        val view = inflater.inflate(R.layout.fragment_recycler, container, false)
 
-        mRecyclerView = view!!.findViewById(R.id.projectsRecycler)
+        mRecyclerView = view!!.findViewById(R.id.recyclerView)
         val layoutManager = LinearLayoutManager(activity)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter

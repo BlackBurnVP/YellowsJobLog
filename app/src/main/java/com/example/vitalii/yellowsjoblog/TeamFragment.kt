@@ -32,9 +32,9 @@ class TeamFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_team, container, false)
+        val view = inflater.inflate(R.layout.fragment_recycler, container, false)
 
-        mRecyclerView = view!!.findViewById(R.id.teamRecycler)
+        mRecyclerView = view!!.findViewById(R.id.recyclerView)
         val layoutManager = LinearLayoutManager(activity!!)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter
@@ -50,7 +50,7 @@ class TeamFragment : Fragment() {
     private val BASE_URL_DEV = "http://dev.joblog.yellows.pl/"
     private var responseSaveUsers:List<Users>? = null
 
-    fun serverConnect(){
+    private fun serverConnect(){
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BASIC
         val httpClient = OkHttpClient.Builder()

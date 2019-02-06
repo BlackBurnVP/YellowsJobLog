@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yellows Job Log</string>
+    <string name="app_name">Yellows JobLog</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reports">Reports</string>
@@ -20,6 +20,7 @@
     <string name="active">Active</string>
     <string name="not_active">Not Active</string>
     <string name="yellows_logo">Yellows Logo</string>
+    <string name="user_name">some text</string>
     <string-array name="projects_array">
         <item>Bookworm</item>
         <item>JobLog</item>

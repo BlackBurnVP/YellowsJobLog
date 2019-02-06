@@ -31,43 +31,44 @@ class StatsFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_stats, container, false)
+        val view = inflater.inflate(R.layout.fragment_recycler, container, false)
 
-        mRecyclerView = view!!.findViewById(R.id.dashboardRecycler)
+        mRecyclerView = view!!.findViewById(R.id.recyclerView)
         val layoutManager = LinearLayoutManager(this.activity!!)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter
-        getTasks()
+
+        //getTasks()
         return view
     }
 
     private var dashboardObject:Callback<List<ReportsPOKO>>? = null
     private var reports:Call<List<ReportsPOKO>>? = null
 
-    private fun getTasks(){
-
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BASIC
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logging)
-
-        dashboardObject = object : Callback<List<ReportsPOKO>>{
-            override fun onResponse(call: Call<List<ReportsPOKO>>, response: Response<List<ReportsPOKO>>) {
-                adapter.updateRecycler(response.body()!!.toMutableList())
-            }
-
-            override fun onFailure(call: Call<List<ReportsPOKO>>, t: Throwable) {
-                Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
-            }
-
-        }
-        retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL_DEV)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient.build())
-            .build()
-        service = retrofit?.create(JobLogService::class.java)
-        reports = service?.getDashboard("user")
-        reports?.enqueue(dashboardObject)
-    }
+//    private fun getTasks(){
+//
+//        val logging = HttpLoggingInterceptor()
+//        logging.level = HttpLoggingInterceptor.Level.BASIC
+//        val httpClient = OkHttpClient.Builder()
+//        httpClient.addInterceptor(logging)
+//
+//        dashboardObject = object : Callback<List<ReportsPOKO>>{
+//            override fun onResponse(call: Call<List<ReportsPOKO>>, response: Response<List<ReportsPOKO>>) {
+//                adapter.updateRecycler(response.body()!!.toMutableList())
+//            }
+//
+//            override fun onFailure(call: Call<List<ReportsPOKO>>, t: Throwable) {
+//                Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
+//            }
+//
+//        }
+//        retrofit = Retrofit.Builder()
+//            .baseUrl(BASE_URL_DEV)
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .client(httpClient.build())
+//            .build()
+//        service = retrofit?.create(JobLogService::class.java)
+//        reports = service?.getDashboard("user")
+//        reports?.enqueue(dashboardObject)
+//    }
 }

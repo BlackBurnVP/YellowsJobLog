@@ -12,15 +12,15 @@
             android:layout_width="match_parent"
             android:layout_height="45dp" android:id="@+id/linearLayout">
         <Button
-                android:text=""
+                android:text="18-02-2018"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" android:id="@+id/btnStartDate" android:layout_weight="1"
-                android:background="@android:color/background_light"/>
+                android:background="@android:color/background_light" android:textSize="@dimen/textSize_xxhdpi"/>
         <Button
                 android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" android:id="@+id/btnEndDate" android:layout_weight="1"
-                android:background="@android:color/background_light"/>
+                android:background="@android:color/background_light" android:textSize="@dimen/textSize_xxhdpi"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_weight="0">
+        <TextView
+                android:text="Working on App"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_Name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.0"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" android:textSize="@dimen/textSize_xxhdpi"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toStartOf="@+id/txt_TimeFlow" android:layout_weight="1"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_TimeFlow"
+                android:lines="1"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/txt_Name"
+                android:layout_toRightOf="@+id/txt_Name"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                android:textAlignment="textEnd"
+                android:textSize="@dimen/textSize_xxhdpi"
+                android:layout_weight="0"
+                android:text="11:40:23-12:30:23"
+                android:gravity="end"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_weight="2">
+        <TextView
+                android:text="JobLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_projectName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.0"
+                android:layout_below="@+id/txt_Name" android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/txt_TimeFlow" android:layout_toLeftOf="@+id/txt_TimeFlow"
+                app:layout_constraintTop_toBottomOf="@+id/txt_Name"
+                app:layout_constraintEnd_toStartOf="@+id/txt_TimeFlow" android:layout_weight="1"
+                android:textSize="@dimen/textSize_xxhdpi"/>
+        <TextView
+                android:text="8:00:00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/txt_resTime"
+                android:layout_toEndOf="@+id/txt_Name"
+                android:layout_toRightOf="@+id/txt_Name"
+                android:layout_below="@+id/txt_TimeFlow"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:textAlignment="textEnd"
+                android:lines="1"
+                app:layout_constraintEnd_toEndOf="@+id/txt_TimeFlow"
+                app:layout_constraintTop_toBottomOf="@+id/txt_TimeFlow"
+                app:layout_constraintStart_toStartOf="@+id/txt_TimeFlow"
+                android:layout_weight="0"
+                android:gravity="end" android:textSize="@dimen/textSize_xxhdpi"/>
+    </LinearLayout>
+</LinearLayout>

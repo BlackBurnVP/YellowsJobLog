@@ -31,9 +31,9 @@ class ClientsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_clients, container, false)
+        val view = inflater.inflate(R.layout.fragment_recycler, container, false)
 
-        mRecyclerView = view!!.findViewById(R.id.clientsRecycler)
+        mRecyclerView = view!!.findViewById(R.id.recyclerView)
         val layoutManager = LinearLayoutManager(activity)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter

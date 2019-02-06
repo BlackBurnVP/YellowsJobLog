@@ -12,14 +12,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.vitalii.yellowsjoblog.MainActivity
 import com.example.vitalii.yellowsjoblog.R
+import com.example.vitalii.yellowsjoblog.api.JobLogService
+import com.example.vitalii.yellowsjoblog.api.ProjectsPOKO
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 @Suppress("DEPRECATION")
-class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
+class ClockFragment : Fragment(){
 
     private lateinit var start:Button
     private lateinit var txtTime:TextView
@@ -58,12 +68,23 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
 
         stats = ArrayList()
 
-        ArrayAdapter.createFromResource(activity!!,R.array.projects_array,android.R.layout.simple_spinner_item).also {
-            adapter->
+        MainActivity().loseFocus()
+
+        serverConnect()
+
+        val adapter = ArrayAdapter(activity!!,android.R.layout.simple_spinner_item,nameOfProjects)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Toast.makeText(activity!!,nameOfProjects[position],Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
         }
-        spinner.onItemSelectedListener = this
 
         onTimerStop()
         onTimerStart()
@@ -155,16 +176,60 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener{
      * OnClickListener for spinner
      */
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val item = parent!!.getItemAtPosition(position)
-        Toast.makeText(activity!!,"Selected item is $item",Toast.LENGTH_SHORT).show()
-    }
+//    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//        val item = nameOfProjects[position]
+//        Toast.makeText(activity!!,"Selected item is $item",Toast.LENGTH_SHORT).show()
+//    }
+//
+//    /**
+//     * OnNothingClick for spinner
+//     */
+//    override fun onNothingSelected(parent: AdapterView<*>?) {
+//
+//    }
 
-    /**
-     * OnNothingClick for spinner
-     */
-    override fun onNothingSelected(parent: AdapterView<*>?) {
 
+    private var projectsObject:Callback<List<ProjectsPOKO>>? = null
+    private var projects:Call<List<ProjectsPOKO>>? = null
+    private var responseSaveProjects:List<ProjectsPOKO>? = null
+    private lateinit var retrofit:Retrofit
+    private val BASE_URL_DEV = "http://dev.joblog.yellows.pl/"
+    private lateinit var service:JobLogService
+    private var nameOfProjects = ArrayList<String>()
+
+    private fun serverConnect(){
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BASIC
+        val httpClient = OkHttpClient.Builder()
+        httpClient.addInterceptor(logging)
+
+        projectsObject = object : Callback<List<ProjectsPOKO>> {
+            override fun onResponse(call: Call<List<ProjectsPOKO>>, response: Response<List<ProjectsPOKO>>) {
+                if(response.body()!=null) {
+                    responseSaveProjects = response.body()!!
+                    for (project in response.body()!!) {
+                        nameOfProjects.add(project.name!!)
+                    }
+                };else{
+                    Toast.makeText(activity!!,"Server answer is null", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<ProjectsPOKO>>, t: Throwable) {
+                Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL_DEV)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(httpClient.build())
+            .build()
+        service = retrofit?.create(JobLogService::class.java)
+        if(responseSaveProjects==null){
+            projects = service?.getProjects()
+            projects?.enqueue(projectsObject)
+        }
     }
 
 //    fun getCurrentTimeUsingDate() {

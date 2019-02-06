@@ -24,6 +24,8 @@ import com.example.vitalii.yellowsjoblog.api.Users
 import java.util.*
 import android.text.format.DateUtils
 import android.view.*
+import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import kotlin.collections.ArrayList
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -67,6 +69,9 @@ class ReportsFragment : Fragment() {
     private var saveProjectsList:MutableSet<String>? = null
 
 
+    private lateinit var mTestButton:Button
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_reports, container, false)
         setHasOptionsMenu(true)
@@ -76,7 +81,6 @@ class ReportsFragment : Fragment() {
 
         saveUsersList = sp.getStringSet("users", mutableSetOf())
         saveProjectsList = sp.getStringSet("projects", mutableSetOf())
-
 
         mButtonStartDate = view!!.findViewById(R.id.btnStartDate)
         mButtonStartDate.setOnClickListener(setDate)
@@ -107,6 +111,7 @@ class ReportsFragment : Fragment() {
         date = "${mButtonStartDate.text}+${mButtonEndDate.text}"
 
         filter = mutableMapOf("date" to date)
+
         serverConnect(filter)
 
         return view

@@ -12,7 +12,8 @@ import android.util.Patterns
 import android.view.View
 import android.widget.EditText
 
-class LoginActivity : AppCompatActivity() {
+class
+LoginActivity : AppCompatActivity() {
 
     private lateinit var txtLogin:EditText
     private lateinit var txtPassword:EditText
@@ -27,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        sp = getSharedPreferences("Email", Context.MODE_PRIVATE)
+        sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
         ed = sp.edit()
         txtLogin = findViewById(R.id.txt_login)
         txtPassword = findViewById(R.id.txt_pass)
@@ -36,20 +37,28 @@ class LoginActivity : AppCompatActivity() {
         if(sp.getBoolean("logged",false)){
             goToMain()
         }
-
     }
 
+    /**
+     * Checking if entered text is Email
+     * @param editText Text Box with email
+     */
     fun isEmail(editText:EditText): Boolean {
         val email:CharSequence = editText.text.toString()
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches())
     }
+
+    /**
+     * Checking if Text Box not empty
+     * @param editText Text Box for checking
+     */
     fun isEmpty(editText: EditText):Boolean{
         val str:CharSequence = editText.text.toString()
         return str.isEmpty()
     }
 
     fun onClick(View: View){
-        sp = getSharedPreferences("Email", Context.MODE_PRIVATE)
+        sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
         ed = sp.edit()
 //        if(!isEmpty(txtLogin)){
 //            txtLogin.error = "Login is required"
@@ -60,13 +69,16 @@ class LoginActivity : AppCompatActivity() {
 //            txtPassword.error = "Password is required"
 //        }; else{
             ed.putBoolean("logged",true)
-            ed.putString(KEY_EMAIL,email).apply()
+            ed.putString("EMAIL",email).commit()
             ed.putString(KEY_PASSWORD,pass).apply()
             goToMain()
 //        }
     }
 
-    fun goToMain(){
+    /**
+     * Redirection to Main Activity
+     */
+    private fun goToMain(){
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
     }

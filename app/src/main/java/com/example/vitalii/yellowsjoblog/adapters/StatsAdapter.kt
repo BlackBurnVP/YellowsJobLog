@@ -27,6 +27,10 @@ class StatsAdapter(private var reports:MutableList<ReportsPOKO>? = ArrayList()) 
         return reports?.size ?:0
     }
 
+    /**
+     * Updating Recycler View Data with new List
+     * @param newList List with new data
+     */
     fun updateRecycler(newList: MutableList<ReportsPOKO>){
         reports!!.clear()
         reports!!.addAll(newList)

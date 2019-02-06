@@ -10,17 +10,26 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="45dp" android:id="@+id/linearLayout">
+            android:layout_height="wrap_content" android:id="@+id/linearLayout" android:layout_weight="0.2">
         <Button
-                android:text=""
+                android:id="@+id/btnStartDate"
+                android:text="18-02-2018"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="2sp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:id="@+id/btnStartDate" android:layout_weight="1"
-                android:background="@android:color/background_light"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_light"
+                android:textSize="@dimen/textSize_mdpi"
+                android:textAllCaps="true"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
         <Button
-                android:text=""
+                android:text="18-02-2018"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" android:id="@+id/btnEndDate" android:layout_weight="1"
-                android:background="@android:color/background_light"/>
+                android:background="@android:color/background_light" android:textSize="@dimen/textSize_mdpi"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -30,7 +39,7 @@
             app:layout_constraintVertical_bias="0.32"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" app:layout_constraintHorizontal_bias="0.0"
-            android:layout_weight="1" android:background="@android:color/background_light">
+            android:layout_weight="3" android:background="@android:color/background_light">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

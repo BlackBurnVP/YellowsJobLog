@@ -2,6 +2,7 @@ package com.example.vitalii.yellowsjoblog.api
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
@@ -20,4 +21,7 @@ interface JobLogService {
 
     @GET("/api/clients")
     fun getClients():Call<List<ClientsPOKO>>
+
+    @POST("api/tasks/{user}")
+    fun getDash(@Path("user")user:String):Call<ReportsPOKO>
 }

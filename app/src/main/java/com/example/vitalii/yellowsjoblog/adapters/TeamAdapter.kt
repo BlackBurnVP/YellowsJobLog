@@ -21,9 +21,9 @@ class TeamAdapter(private var team:MutableList<Users>? = ArrayList()) : Recycler
         holder.email.text = tm.email
         holder.role.text = tm.role
         if(tm.isActive!!){
-            holder.isActive.text = R.string.active.toString()
+            holder.isActive.text = "Active"
         };else{
-            holder.isActive.text = R.string.not_active.toString()
+            holder.isActive.text = "Not Active"
         }
     }
 

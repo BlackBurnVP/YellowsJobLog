@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="textSize_mdpi">33sp</dimen>
+    <dimen name="textSize_hdpi">12sp</dimen>
+    <dimen name="textSize_xxxhdpi">18sp</dimen>
+    <dimen name="textSize_xxhdpi">16</dimen>
+</resources>
