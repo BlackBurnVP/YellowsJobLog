@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.vitalii.yellowsjoblog.R
-import com.example.vitalii.yellowsjoblog.api.ClientsPOKO
+import com.example.vitalii.yellowsjoblog.api.Clients
 
-class ClientsAdapter(private var projects:MutableList<ClientsPOKO>? = ArrayList()) : RecyclerView.Adapter<ClientsAdapter.ViewHolder>(){
+class ClientsAdapter(private var projects:MutableList<Clients>? = ArrayList()) : RecyclerView.Adapter<ClientsAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.clients_view, parent, false)
@@ -32,7 +32,7 @@ class ClientsAdapter(private var projects:MutableList<ClientsPOKO>? = ArrayList(
         return projects?.size ?:0
     }
 
-    fun updateRecycler(newList: MutableList<ClientsPOKO>){
+    fun updateRecycler(newList: MutableList<Clients>){
         projects!!.clear()
         projects!!.addAll(newList)
         notifyDataSetChanged()

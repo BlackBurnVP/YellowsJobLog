@@ -21,4 +21,6 @@
               android:label="Clients" tools:layout="@layout/fragment_clients"/>
     <fragment android:id="@+id/teamFragment" android:name="com.example.vitalii.yellowsjoblog.TeamFragment"
               android:label="Team" tools:layout="@layout/fragment_team"/>
+    <activity android:id="@+id/loginActivity" android:name="com.example.vitalii.yellowsjoblog.LoginActivity"
+              android:label="activity_login" tools:layout="@layout/activity_login"/>
 </navigation>

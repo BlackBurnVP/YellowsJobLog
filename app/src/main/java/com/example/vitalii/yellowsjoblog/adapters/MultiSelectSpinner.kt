@@ -11,7 +11,7 @@ import android.util.AttributeSet
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
-import com.example.vitalii.yellowsjoblog.api.ProjectsPOKO
+import com.example.vitalii.yellowsjoblog.api.Projects
 import com.example.vitalii.yellowsjoblog.api.Users
 
 
@@ -28,7 +28,7 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
     private var _title:String? = null
     val usersListOfID = ArrayList<Int>()
     private var usersList:List<Users>? = null
-    private var projectsPOJOList:List<ProjectsPOKO>? = null
+    private var projectsPOJOList:List<Projects>? = null
     val projectsListOfID = ArrayList<Int>()
 
 
@@ -45,7 +45,7 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
         setUsers(nameOfUsers)
     }
 
-    fun addProjects(newList:List<ProjectsPOKO>){
+    fun addProjects(newList:List<Projects>){
         projectsPOJOList = newList
         val nameOfProjects = ArrayList<String>()
         for(project in newList){
@@ -99,7 +99,6 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
      * @param context
      */
     constructor(context: Context) : super(context) {
-
         _proxyAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item)
         super.setAdapter(_proxyAdapter)
     }
@@ -110,7 +109,6 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
      * @param attrs
      */
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-
         _proxyAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item)
         super.setAdapter(_proxyAdapter)
     }
@@ -203,6 +201,11 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
         val builder = AlertDialog.Builder(context)
         val builder2 = AlertDialog.Builder(context)
 
+        mOpenInitiated = true
+//        if (mListener != null) {
+//            mListener!!.onSpinnerOpened(this)
+//        }
+
         builder.setMultiChoiceItems(_itemsUsers, _selectionUsers, this)
         builder2.setMultiChoiceItems(_itemsProjects, _selectionProjects, this)
         if(_itemsUsers!=null){
@@ -211,7 +214,7 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
         if(_itemsProjects!=null){
             builder2.show()
         }
-        return true
+        return super.performClick()
     }
 
     /**
@@ -321,12 +324,12 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
         /**
          * Callback triggered when the spinner was opened.
          */
-        fun onSpinnerOpened(spinner: Spinner)
+        fun onSpinnerOpened(spinner: MultiSelectSpinner)
 
         /**
          * Callback triggered when the spinner was closed.
          */
-        fun onSpinnerClosed(spinner: Spinner)
+        fun onSpinnerClosed(spinner: MultiSelectSpinner)
 
     }
 
@@ -346,9 +349,9 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
 //    }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
-        if (hasBeenOpened() && hasFocus) {
+        //if (hasBeenOpened() && hasFocus) {
             performClosedEvent()
-        }
+        //}
     }
 
     /**
@@ -365,6 +368,7 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
      */
     fun performClosedEvent() {
         mOpenInitiated = false
+        println("closed")
         if (mListener != null) {
             mListener!!.onSpinnerClosed(this)
         }

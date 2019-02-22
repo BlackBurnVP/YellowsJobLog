@@ -1,6 +1,8 @@
 package com.example.vitalii.yellowsjoblog
 
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -22,10 +24,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class TeamFragment : Fragment() {
 
+    private val team:MutableList<Users> = ArrayList()
+    private val adapter = TeamAdapter(team)
+    private val connect = ServerConnection()
+
     private lateinit var mRecyclerView:RecyclerView
 
-    val team:MutableList<Users> = ArrayList()
-    val adapter = TeamAdapter(team)
+    private lateinit var sp: SharedPreferences
+    private lateinit var ed: SharedPreferences.Editor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,33 +40,28 @@ class TeamFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_recycler, container, false)
 
+        sp = this.activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+        ed = sp.edit()
+
         mRecyclerView = view!!.findViewById(R.id.recyclerView)
         val layoutManager = LinearLayoutManager(activity!!)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter
+
         serverConnect()
         return view
     }
 
-
-    private var service:JobLogService? = null
-    var retrofit:Retrofit? = null
-    var usersObject:Callback<List<Users>>? = null
-    var users:Call<List<Users>>? = null
-    private val BASE_URL_DEV = "http://dev.joblog.yellows.pl/"
     private var responseSaveUsers:List<Users>? = null
 
     private fun serverConnect(){
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BASIC
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logging)
 
+        val token = sp.getString("token","")
         val layoutManager = LinearLayoutManager(this.activity!!)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter
 
-        usersObject = object : Callback<List<Users>> {
+        connect.createService(token!!).getUsers().enqueue(object : Callback<List<Users>> {
             override fun onResponse(call: Call<List<Users>>, response: Response<List<Users>>) {
                 team.addAll(response.body()!!)
                 adapter.updateRecycler(response.body()!!.toMutableList())
@@ -85,17 +86,7 @@ class TeamFragment : Fragment() {
             override fun onFailure(call: Call<List<Users>>, t: Throwable) {
                 Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
             }
-
-        }
-
-        retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL_DEV)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient.build())
-            .build()
-        service = retrofit?.create(JobLogService::class.java)
-        users = service?.getUsers()
-        users?.enqueue(usersObject)
+        })
     }
 }
 

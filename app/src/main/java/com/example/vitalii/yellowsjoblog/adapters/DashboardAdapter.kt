@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.vitalii.yellowsjoblog.R
-import com.example.vitalii.yellowsjoblog.api.ReportsPOKO
+import com.example.vitalii.yellowsjoblog.api.Reports
 
-class StatsAdapter(private var reports:MutableList<ReportsPOKO>? = ArrayList()) : RecyclerView.Adapter<StatsAdapter.ViewHolder>(){
+class DashboardAdapter(private var reports:MutableList<Reports>? = ArrayList()) : RecyclerView.Adapter<DashboardAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.stat_view, parent, false)
@@ -31,7 +31,7 @@ class StatsAdapter(private var reports:MutableList<ReportsPOKO>? = ArrayList()) 
      * Updating Recycler View Data with new List
      * @param newList List with new data
      */
-    fun updateRecycler(newList: MutableList<ReportsPOKO>){
+    fun updateRecycler(newList: MutableList<Reports>){
         reports!!.clear()
         reports!!.addAll(newList)
         notifyDataSetChanged()

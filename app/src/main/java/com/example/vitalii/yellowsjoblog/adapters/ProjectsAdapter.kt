@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.vitalii.yellowsjoblog.R
-import com.example.vitalii.yellowsjoblog.api.ProjectsPOKO
+import com.example.vitalii.yellowsjoblog.api.Projects
 
-class ProjectsAdapter(private var projects:MutableList<ProjectsPOKO>? = ArrayList()) : RecyclerView.Adapter<ProjectsAdapter.ViewHolder>(){
+class ProjectsAdapter(private var projects:MutableList<Projects>? = ArrayList()) : RecyclerView.Adapter<ProjectsAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.projects_view, parent, false)
@@ -31,7 +31,7 @@ class ProjectsAdapter(private var projects:MutableList<ProjectsPOKO>? = ArrayLis
         return projects?.size ?:0
     }
 
-    fun updateRecycler(newList: MutableList<ProjectsPOKO>){
+    fun updateRecycler(newList: MutableList<Projects>){
         projects!!.clear()
         projects!!.addAll(newList)
         notifyDataSetChanged()

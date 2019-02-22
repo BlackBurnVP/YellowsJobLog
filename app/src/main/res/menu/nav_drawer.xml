@@ -17,6 +17,7 @@
                       android:id="@+id/clientsFragment"/>
                 <item android:title="@string/team" android:icon="@drawable/ic_user_group"
                       android:id="@+id/teamFragment"/>
+                <item android:title="Sign Out" android:id="@+id/loginActivity"/>
             </group>
         </menu>
     </item>

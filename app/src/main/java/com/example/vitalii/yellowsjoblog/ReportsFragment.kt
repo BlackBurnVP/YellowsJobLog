@@ -1,83 +1,66 @@
 package com.example.vitalii.yellowsjoblog
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Button
 import android.widget.Toast
 import com.example.vitalii.yellowsjoblog.adapters.ReportsAdapter
-import com.example.vitalii.yellowsjoblog.api.ReportsPOKO
-import com.example.vitalii.yellowsjoblog.api.JobLogService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import com.example.vitalii.yellowsjoblog.adapters.MultiSelectSpinner
-import com.example.vitalii.yellowsjoblog.api.ProjectsPOKO
-import com.example.vitalii.yellowsjoblog.api.Users
 import java.util.*
 import android.text.format.DateUtils
 import android.view.*
-import android.widget.TextView
-import androidx.navigation.fragment.findNavController
+import com.example.vitalii.yellowsjoblog.api.*
 import kotlin.collections.ArrayList
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import java.text.SimpleDateFormat
 
 class ReportsFragment : Fragment() {
 
-    private lateinit var mRecycleView:RecyclerView
-    lateinit var mUsersSpinner:MultiSelectSpinner
-    private lateinit var mProjectsSpinner:MultiSelectSpinner
+    @SuppressLint("SimpleDateFormat")
+
+    private lateinit var mRecycleView: RecyclerView
+    private lateinit var mUsersSpinner: MultiSelectSpinner
+    private lateinit var mProjectsSpinner: MultiSelectSpinner
     private lateinit var mButtonStartDate: Button
-    private lateinit var mButtonEndDate:Button
-    private lateinit var mButton: Button
+    private lateinit var mButtonEndDate: Button
 
     private lateinit var sp: SharedPreferences
     private lateinit var ed: SharedPreferences.Editor
 
-    private var tasks:MutableList<ReportsPOKO> = ArrayList()
+    private var tasks: MutableList<Reports> = ArrayList()
 
-    private var service:JobLogService? = null
-    private var retrofit:Retrofit? = null
-
-    private var responseSaveReports:List<ReportsPOKO>? = null
-    private var responseSaveUsers:List<Users>? = null
-    private var responseSaveProjects:List<ProjectsPOKO>? = null
-
-    private var filter = mutableMapOf<String,String>()
+    private var filter = mutableMapOf<String, String>()
     private var adapter = ReportsAdapter(tasks)
-    private var startDate:Long? = null
-    private var endDate:Long? = null
-    private var date:String = ""
+    private var startDate: Long? = null
+    private var endDate: Long? = null
+    private var date: String = ""
 
     private val dateAndTime = Calendar.getInstance()
-    private val BASE_URL_DEV = "http://dev.joblog.yellows.pl/"
-    private val BASE_URL = "http://joblog.yellows.pl/"
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
-    private val strDateFormat = "yyyy-MM-dd"
-    private val dateFormat = SimpleDateFormat(strDateFormat)
+    private var saveUsersList: MutableSet<String>? = null
 
-    private var saveUsersList:MutableSet<String>? = null
-    private var saveProjectsList:MutableSet<String>? = null
+    private var saveProjectsList: MutableSet<String>? = null
 
-
-    private lateinit var mTestButton:Button
-
+    private val connect = ServerConnection()
+    private lateinit var token: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_reports, container, false)
         setHasOptionsMenu(true)
 
-        sp = this.activity!!.getSharedPreferences("TIMER", Context.MODE_PRIVATE)
+        sp = this.activity!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
         ed = sp.edit()
+
+        token = sp.getString("token", "")!!
 
         saveUsersList = sp.getStringSet("users", mutableSetOf())
         saveProjectsList = sp.getStringSet("projects", mutableSetOf())
@@ -88,8 +71,6 @@ class ReportsFragment : Fragment() {
         mButtonEndDate.setOnClickListener(setDate)
 
         mRecycleView = view!!.findViewById(R.id.recycler_reports)
-        val itemDecor = DividerItemDecoration(context,0)
-        mRecycleView.addItemDecoration(itemDecor)
 
         val layoutManager = LinearLayoutManager(this.activity!!)
         mRecycleView.layoutManager = layoutManager
@@ -97,22 +78,22 @@ class ReportsFragment : Fragment() {
 
         mUsersSpinner = MultiSelectSpinner(activity!!)
         mUsersSpinner.setUsers(saveUsersList!!.toList())
-        //mUsersSpinner.setSelection(0)
 
         mProjectsSpinner = MultiSelectSpinner(activity!!)
         mProjectsSpinner.setProjects(saveProjectsList!!.toList())
-        //mProjectsSpinner.setSelection(0)
 
         endDate = dateAndTime.timeInMillis
-        setInitialDateTime(mButtonEndDate,dateFormat.format(endDate))
-        dateAndTime.add(Calendar.DATE,-7)
+        setInitialDateTime(mButtonEndDate, dateFormat.format(endDate))
+        dateAndTime.add(Calendar.DATE, -7)
         startDate = dateAndTime.timeInMillis
-        setInitialDateTime(mButtonStartDate,dateFormat.format(startDate))
+        setInitialDateTime(mButtonStartDate, dateFormat.format(startDate))
         date = "${mButtonStartDate.text}+${mButtonEndDate.text}"
 
         filter = mutableMapOf("date" to date)
 
-        serverConnect(filter)
+        getProjects()
+        getUsers()
+        getReports(filter)
 
         return view
     }
@@ -120,64 +101,75 @@ class ReportsFragment : Fragment() {
     /**
      * Method for Filters
      */
-    private fun applyFilters(){
-        println("usersListID ${mUsersSpinner.usersListOfID}")
-        println("projectsListID ${mProjectsSpinner.projectsListOfID}")
-        date = "${mButtonStartDate.text}+${mButtonEndDate.text}"
-        filter = mutableMapOf("date" to date)
-        if(mUsersSpinner.usersListOfID.isNotEmpty()){
+    private fun applyFilters() {
+        if (mUsersSpinner.usersListOfID.isNotEmpty()) {
             val sb = StringBuilder()
-            for (i in mUsersSpinner.usersListOfID.indices){
+            for (i in mUsersSpinner.usersListOfID.indices) {
                 val num = mUsersSpinner.usersListOfID[i]
                 sb.append(num)
                 sb.append("+")
             }
             val usersStringID = sb.toString()
-            filter.put("users",usersStringID)
+            filter["users"] = usersStringID
         }
-        if(mProjectsSpinner.projectsListOfID.isNotEmpty()){
+        if (mProjectsSpinner.projectsListOfID.isNotEmpty()) {
             val sb = StringBuilder()
-            for (i in mProjectsSpinner.projectsListOfID.indices){
+            for (i in mProjectsSpinner.projectsListOfID.indices) {
                 val num = mProjectsSpinner.projectsListOfID[i]
                 sb.append(num)
                 sb.append("+")
             }
             val projectsStringID = sb.toString()
-            filter.put("projects",projectsStringID)
+            filter["projects"] = projectsStringID
         }
-        serverConnect(filter)
+        getReports(filter)
     }
 
     /**
      * Method for DataPicker
      */
 
-    private val setDate= View.OnClickListener { btn ->
+    private val setDate = View.OnClickListener { btn ->
         val currentDate = Date()
-        val date = DatePickerDialog(activity!!, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-            dateAndTime.set(Calendar.YEAR, year)
-            dateAndTime.set(Calendar.MONTH, month)
-            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            if(btn.id == R.id.btnStartDate){
-                startDate = dateAndTime.timeInMillis
-                val startDateString = dateFormat.format(startDate)
-                println(startDate!!)
-                setInitialDateTime(btn, startDateString!!)
-            };else{
-                endDate = dateAndTime.timeInMillis
-                val endDateString = dateFormat.format(endDate)
-                if (endDate!!<startDate!!){
-                    Toast.makeText(activity!!,"You have to change end Date",Toast.LENGTH_SHORT).show()
-                    println("ERROR")
-                };else if (endDate!!>currentDate.time){
-                    Toast.makeText(activity!!,"You have to change end Date",Toast.LENGTH_SHORT).show()
-                };else{
-                    setInitialDateTime(btn,endDateString!!)
+        val date = DatePickerDialog(
+            activity!!, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                dateAndTime.set(Calendar.YEAR, year)
+                dateAndTime.set(Calendar.MONTH, month)
+                dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                if (btn.id == R.id.btnStartDate) {
+                    startDate = dateAndTime.timeInMillis
+                    val startDateString = dateFormat.format(startDate)
+                    println(startDate!!)
+                    setInitialDateTime(btn, startDateString!!)
+                    date = "$startDateString+${mButtonEndDate.text}"
+                    filter["date"] = date
+                    getReports(filter)
+                }; else {
+                    endDate = dateAndTime.timeInMillis
+                    val endDateString = dateFormat.format(endDate)
+                    when {
+                        endDate!! < startDate!! -> {
+                            Toast.makeText(activity!!, "You have to change end Date", Toast.LENGTH_SHORT).show()
+                            println("ERROR")
+                        }
+                        endDate!! > currentDate.time -> Toast.makeText(
+                            activity!!,
+                            "You have to change end Date",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        else -> {
+                            setInitialDateTime(btn, endDateString!!)
+                            date = "${mButtonStartDate.text}+$endDateString"
+                            filter["date"] = date
+                            getReports(filter)
+                        }
+                    }
                 }
-            } },
+            },
             dateAndTime.get(Calendar.YEAR),
             dateAndTime.get(Calendar.MONTH),
-            dateAndTime.get(Calendar.DAY_OF_MONTH))
+            dateAndTime.get(Calendar.DAY_OF_MONTH)
+        )
             .show()
     }
 
@@ -187,12 +179,13 @@ class ReportsFragment : Fragment() {
      * @param time in Long from DataPicker
      */
 
-    private fun setInitialDateTime(button:View,time:Long) {
+    private fun setInitialDateTime(button: View, time: Long) {
         button as Button
-            button.text = DateUtils.formatDateTime(activity, time,
-                DateUtils.FORMAT_NUMERIC_DATE or
-                        DateUtils.FORMAT_SHOW_YEAR
-            )
+        button.text = DateUtils.formatDateTime(
+            activity, time,
+            DateUtils.FORMAT_NUMERIC_DATE or
+                    DateUtils.FORMAT_SHOW_YEAR
+        )
     }
 
     /**
@@ -201,7 +194,7 @@ class ReportsFragment : Fragment() {
      * @param time in String from DataPicker
      */
 
-    private fun setInitialDateTime(button:View,time:String) {
+    private fun setInitialDateTime(button: View, time: String) {
         button as Button
         button.text = time
     }
@@ -212,111 +205,93 @@ class ReportsFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.overflow_menu, menu)
-        inflater?.inflate(R.menu.filter,menu)
+        inflater?.inflate(R.menu.filter, menu)
     }
+
     /**
      * Setting OnClickListeners for toolbar menu items
      */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item!!.itemId){
+        when (item!!.itemId) {
             R.id.usersFilter -> mUsersSpinner.performClick()
             R.id.projectsFilter -> mProjectsSpinner.performClick()
             R.id.filter -> applyFilters()
         }
         return super.onOptionsItemSelected(item)
     }
+
     /**
-     * Connection to server
-     * @param filter of Map defined for input filters for tasks
+     * Getting reports from server
+     * @param filter Map defined for input filters for reports
      */
-    private var reportsObject:Callback<List<ReportsPOKO>>? = null
-    private var reports:Call<List<ReportsPOKO>>? = null
-    private var usersObject:Callback<List<Users>>? = null
-    private var users:Call<List<Users>>? = null
-    private var projectsObject:Callback<List<ProjectsPOKO>>? = null
-    private var projects:Call<List<ProjectsPOKO>>? = null
+    private fun getReports(filter: MutableMap<String, String>) {
 
-    private fun serverConnect(filter:MutableMap<String,String>){
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BASIC
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logging)
-
-        reportsObject = object : Callback<List<ReportsPOKO>> {
-            override fun onResponse(call: Call<List<ReportsPOKO>>, response: Response<List<ReportsPOKO>>) {
-                if (response.body() != null) {
-                    responseSaveReports = response.body()!!
-                    tasks.addAll(response.body()!!)
-                    adapter.updateRecycler(response.body()!!.toMutableList())
-                    //println("Tasks: $tasks")
-                }; else {
-                    Toast.makeText(activity!!, "Server answer is null", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<ReportsPOKO>>, t: Throwable) {
-                Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        usersObject = object :Callback<List<Users>>{
-            override fun onResponse(call: Call<List<Users>>, response: Response<List<Users>>) {
-                if(response.body()!=null){
-                    responseSaveUsers = response.body()!!
-                    val nameOfUsers = ArrayList<String>()
-                    for(user in response.body()!!){
-                        nameOfUsers.add(user.fullName!!)
+        connect.createService(token).getTasks(filter)
+            .enqueue(object : Callback<List<Reports>> {
+                override fun onResponse(call: Call<List<Reports>>, response: Response<List<Reports>>) {
+                    if (response.body() != null) {
+                        tasks.addAll(response.body()!!)
+                        adapter.updateRecycler(response.body()!!.toMutableList())
+                    }; else {
+                        Toast.makeText(activity!!, "Server answer is null", Toast.LENGTH_SHORT).show()
                     }
-                    mUsersSpinner.addUsers(response.body()!!)
-                    //mUsersSpinner.setItems(nameOfUsers)
-                    ed.putStringSet("users",nameOfUsers.toMutableSet()).commit()
-                };else{
-                    Toast.makeText(activity!!,"Server answer is null",Toast.LENGTH_SHORT).show()
                 }
-            }
 
-            override fun onFailure(call: Call<List<Users>>, t: Throwable) {
-                Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
-            }
-        }
+                override fun onFailure(call: Call<List<Reports>>, t: Throwable) {
+                    Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
 
-        projectsObject = object :Callback<List<ProjectsPOKO>>{
-            override fun onResponse(call: Call<List<ProjectsPOKO>>, response: Response<List<ProjectsPOKO>>) {
-                if(response.body()!=null) {
-                    responseSaveProjects = response.body()!!
-                    val nameOfProjects = ArrayList<String>()
-                    for (project in response.body()!!) {
-                        nameOfProjects.add(project.name!!)
+    /**
+     * Getting users from server
+     */
+    private fun getUsers() {
+
+        connect.createService(token).getUsers()
+            .enqueue(object : Callback<List<Users>> {
+                override fun onResponse(call: Call<List<Users>>, response: Response<List<Users>>) {
+                    if (response.body() != null) {
+                        val nameOfUsers = ArrayList<String>()
+                        for (user in response.body()!!) {
+                            nameOfUsers.add(user.fullName!!)
+                        }
+                        mUsersSpinner.addUsers(response.body()!!)
+                        ed.putStringSet("users", nameOfUsers.toMutableSet()).commit()
+                    }; else {
+                        Toast.makeText(activity!!, "Server answer is null", Toast.LENGTH_SHORT).show()
                     }
-                    println("projects response - ${response.body()!!}")
-                    mProjectsSpinner.addProjects(response.body()!!)
-                    ed.putStringSet("projects",nameOfProjects.toMutableSet()).commit()
-                };else{
-                    Toast.makeText(activity!!,"Server answer is null",Toast.LENGTH_SHORT).show()
                 }
-            }
 
-            override fun onFailure(call: Call<List<ProjectsPOKO>>, t: Throwable) {
-                Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
-            }
-        }
+                override fun onFailure(call: Call<List<Users>>, t: Throwable) {
+                    Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
 
-        retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL_DEV)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient.build())
-            .build()
-        service = retrofit?.create(JobLogService::class.java)
-        reports = service?.getTasks(filter)
-        reports?.enqueue(reportsObject)
-        if(responseSaveUsers==null) {
-            users = service?.getUsers()
-            users?.enqueue(usersObject)
-        }
-        if(responseSaveProjects==null){
-            projects = service?.getProjects()
-            projects?.enqueue(projectsObject)
-        }
+    /**
+     * Getting projects from server
+     */
+    private fun getProjects() {
+        connect.createService(token).getProjects()
+            .enqueue(object : Callback<List<Projects>> {
+                override fun onResponse(call: Call<List<Projects>>, response: Response<List<Projects>>) {
+                    if (response.body() != null) {
+                        val nameOfProjects = ArrayList<String>()
+                        for (project in response.body()!!) {
+                            nameOfProjects.add(project.name!!)
+                        }
+                        mProjectsSpinner.addProjects(response.body()!!)
+                        ed.putStringSet("projects", nameOfProjects.toMutableSet()).commit()
+                    }; else {
+                        Toast.makeText(activity!!, "Server answer is null", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<List<Projects>>, t: Throwable) {
+                    Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     override fun onResume() {

@@ -25,8 +25,8 @@
             app:srcCompat="@drawable/logo"/>
     <Button
             android:text="@string/login"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/btn_login"
             android:layout_marginEnd="130dp"
             android:layout_marginRight="130dp"
@@ -35,7 +35,7 @@
             android:onClick="onClick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.715"
+            app:layout_constraintVertical_bias="0.418"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="#727cf5"
             android:fontFamily="sans-serif"
@@ -48,7 +48,7 @@
             android:layout_marginStart="130dp"/>
     <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:id="@+id/txt_login_layout"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,7 @@
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="234dp"

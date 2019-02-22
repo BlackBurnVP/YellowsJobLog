@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.example.vitalii.yellowsjoblog.api.ServerConnection
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sp: SharedPreferences
     private lateinit var ed: SharedPreferences.Editor
+
+    private val connect = ServerConnection()
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,13 +39,15 @@ class MainActivity : AppCompatActivity() {
         mNavView = findViewById(R.id.nav_view)
         mNavController = this.findNavController(R.id.myNavHostFragment)
         val headerView = mNavView.getHeaderView(0)
-        val text:TextView = headerView.findViewById(R.id.txt_test)
+        val text:TextView = headerView.findViewById(R.id.txt_UserName)
 
-        val string = sp.getString("EMAIL","")
-        text.text = string
+        text.text = sp.getString("EMAIL","")
 
         NavigationUI.setupActionBarWithNavController(this,mNavController,mDrawerLayout)
         NavigationUI.setupWithNavController(mNavView,mNavController)
+
+        println(sp.getBoolean("logged",false))
+        println(sp.getString("EMAIL","email is empty"))
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -58,7 +63,8 @@ class MainActivity : AppCompatActivity() {
         if (currentFocus != null){
             val inputMethodManager = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
-            currentFocus.clearFocus()
+            currentFocus!!.clearFocus()
         }
     }
+
 }

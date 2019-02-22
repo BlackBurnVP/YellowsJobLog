@@ -1,27 +1,31 @@
 package com.example.vitalii.yellowsjoblog.api
 
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.QueryMap
+import retrofit2.http.*
+
 
 interface JobLogService {
     @GET("/api/tasks/{user}")
-    fun getDashboard(@Path("user") user:String):Call<List<ReportsPOKO>>
+    fun getDashboard(@Path("user") user:String):Call<List<Reports>>
 
     @GET("/api/tasks")
-    fun getTasks(@QueryMap(encoded = false) filter:MutableMap<String,String>):Call<List<ReportsPOKO>>
+    fun getTasks(@QueryMap(encoded = false) filter:MutableMap<String,String>):Call<List<Reports>>
 
     @GET("/api/users")
     fun getUsers():Call<List<Users>>
 
     @GET("/api/projects")
-    fun getProjects():Call<List<ProjectsPOKO>>
+    fun getProjects():Call<List<Projects>>
 
     @GET("/api/clients")
-    fun getClients():Call<List<ClientsPOKO>>
+    fun getClients():Call<List<Clients>>
 
-    @POST("api/tasks/{user}")
-    fun getDash(@Path("user")user:String):Call<ReportsPOKO>
+    @POST("api/user/token")
+    fun basicLogin(): Call<Token>
+
+    @POST("api/clients/new")
+    fun newCLient(@Body client:AddClient):Call<String>
+
+    @POST("api/clients/new")
+    fun newClientV2(@Body cl:ArrayList<Int>)
 }

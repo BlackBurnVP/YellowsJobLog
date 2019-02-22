@@ -5,25 +5,34 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.provider.ContactsContract
 import android.text.TextUtils
 import android.util.Patterns
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
+import com.example.vitalii.yellowsjoblog.api.JobLogService
+import com.example.vitalii.yellowsjoblog.api.ServerConnection
+import com.example.vitalii.yellowsjoblog.api.Token
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class
 LoginActivity : AppCompatActivity() {
 
     private lateinit var txtLogin:EditText
     private lateinit var txtPassword:EditText
-    private val KEY_EMAIL:String = ""
-    private val KEY_PASSWORD:String = ""
     lateinit var email:String
     private lateinit var pass:String
     private lateinit var sp:SharedPreferences
     private lateinit var ed:SharedPreferences.Editor
 
+    private val connect = ServerConnection()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +41,10 @@ LoginActivity : AppCompatActivity() {
         ed = sp.edit()
         txtLogin = findViewById(R.id.txt_login)
         txtPassword = findViewById(R.id.txt_pass)
-        email = txtLogin.text.toString()
-        pass = txtPassword.text.toString()
+//        email = txtLogin.text.toString()
+//        pass = txtPassword.text.toString()
+//        ed.putBoolean("logged",false)
+        ed.putBoolean("logged",false)
         if(sp.getBoolean("logged",false)){
             goToMain()
         }
@@ -68,11 +79,35 @@ LoginActivity : AppCompatActivity() {
 //        {
 //            txtPassword.error = "Password is required"
 //        }; else{
-            ed.putBoolean("logged",true)
-            ed.putString("EMAIL",email).commit()
-            ed.putString(KEY_PASSWORD,pass).apply()
-            goToMain()
+            sendLogin("vitalii.pshenychniuk@gmail.com","123415z")
+            email = txtLogin.text.toString()
+            pass = txtPassword.text.toString()
+            //ed.putBoolean("logged",true)
+            ed.putString("EMAIL",email).apply()
+
 //        }
+    }
+
+    private fun sendLogin(username:String, password:String){
+        connect.createService(username,password).basicLogin()
+            .enqueue(object : Callback<Token> {
+                override fun onResponse(call: Call<Token>, response: Response<Token>) {
+                    Toast.makeText(this@LoginActivity,"Successful response", Toast.LENGTH_SHORT).show()
+                    println("Response IS ${response.body()!!.token}")
+                    val token = response.body()!!.token
+                    ed.putString("token",token).apply()
+                    ed.putBoolean("logged",true)
+                    goToMain()
+                    if (response.body() == null){
+                        Toast.makeText(this@LoginActivity,"Answer is null", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this@LoginActivity,"Answer not null", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<Token>, t: Throwable) {
+                    Toast.makeText(this@LoginActivity,"ERROR", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     /**
@@ -81,5 +116,6 @@ LoginActivity : AppCompatActivity() {
     private fun goToMain(){
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
+        //startActivity(intent)
     }
 }

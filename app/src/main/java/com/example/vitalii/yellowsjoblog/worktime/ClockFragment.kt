@@ -14,15 +14,11 @@ import android.view.ViewGroup
 import android.widget.*
 import com.example.vitalii.yellowsjoblog.MainActivity
 import com.example.vitalii.yellowsjoblog.R
-import com.example.vitalii.yellowsjoblog.api.JobLogService
-import com.example.vitalii.yellowsjoblog.api.ProjectsPOKO
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import com.example.vitalii.yellowsjoblog.api.Projects
+import com.example.vitalii.yellowsjoblog.api.ServerConnection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -57,7 +53,7 @@ class ClockFragment : Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_clock, container, false)
 
-        sp = this.activity!!.getSharedPreferences("TIMER",Context.MODE_PRIVATE)
+        sp = context!!.getSharedPreferences("PREF_NAME",Context.MODE_PRIVATE)
         ed = sp.edit()
 
         start = view!!.findViewById(R.id.button)
@@ -120,7 +116,7 @@ class ClockFragment : Fragment(){
             //start.setOnLongClickListener {
                 val layoutManager = LinearLayoutManager(this.activity!!)
                 testRecycler.layoutManager = layoutManager
-                //val adapter = StatsAdapter(stats)
+                //val adapter = DashboardAdapter(stats)
                 //testRecycler.adapter = adapter
                 startRun = false
             data = Date()
@@ -188,23 +184,17 @@ class ClockFragment : Fragment(){
 //
 //    }
 
-
-    private var projectsObject:Callback<List<ProjectsPOKO>>? = null
-    private var projects:Call<List<ProjectsPOKO>>? = null
-    private var responseSaveProjects:List<ProjectsPOKO>? = null
-    private lateinit var retrofit:Retrofit
-    private val BASE_URL_DEV = "http://dev.joblog.yellows.pl/"
-    private lateinit var service:JobLogService
+    private var responseSaveProjects:List<Projects>? = null
     private var nameOfProjects = ArrayList<String>()
+    private val connect = ServerConnection()
 
     private fun serverConnect(){
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BASIC
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logging)
 
-        projectsObject = object : Callback<List<ProjectsPOKO>> {
-            override fun onResponse(call: Call<List<ProjectsPOKO>>, response: Response<List<ProjectsPOKO>>) {
+        val token = sp.getString("token","")
+
+        connect.createService(token!!).getProjects()
+           .enqueue(object : Callback<List<Projects>> {
+            override fun onResponse(call: Call<List<Projects>>, response: Response<List<Projects>>) {
                 if(response.body()!=null) {
                     responseSaveProjects = response.body()!!
                     for (project in response.body()!!) {
@@ -214,22 +204,10 @@ class ClockFragment : Fragment(){
                     Toast.makeText(activity!!,"Server answer is null", Toast.LENGTH_SHORT).show()
                 }
             }
-
-            override fun onFailure(call: Call<List<ProjectsPOKO>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Projects>>, t: Throwable) {
                 Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL_DEV)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient.build())
-            .build()
-        service = retrofit?.create(JobLogService::class.java)
-        if(responseSaveProjects==null){
-            projects = service?.getProjects()
-            projects?.enqueue(projectsObject)
-        }
+        })
     }
 
 //    fun getCurrentTimeUsingDate() {
