@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Button
 import android.widget.Toast
+import androidx.navigation.findNavController
 import com.example.vitalii.yellowsjoblog.adapters.ProjectsAdapter
 import com.example.vitalii.yellowsjoblog.api.Projects
 import com.example.vitalii.yellowsjoblog.api.ServerConnection
@@ -31,6 +31,7 @@ class ProjectsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_recycler, container, false)
+        setHasOptionsMenu(true)
 
         sp = context!!.getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
         ed = sp.edit()
@@ -64,4 +65,13 @@ class ProjectsFragment : Fragment() {
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater!!.inflate(R.menu.add_new,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        view!!.findNavController().navigate(R.id.action_projectsFragment_to_addProjectFragment)
+        return super.onOptionsItemSelected(item)
+    }
 }

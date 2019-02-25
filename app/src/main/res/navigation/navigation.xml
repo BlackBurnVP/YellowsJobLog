@@ -16,11 +16,24 @@
               android:label="Reports" tools:layout="@layout/fragment_reports">
     </fragment>
     <fragment android:id="@+id/projectsFragment" android:name="com.example.vitalii.yellowsjoblog.ProjectsFragment"
-              android:label="Projects" tools:layout="@layout/fragment_projects"/>
+              android:label="Projects" tools:layout="@layout/fragment_projects">
+        <action android:id="@+id/action_projectsFragment_to_addProjectFragment"
+                app:destination="@id/addProjectFragment"/>
+    </fragment>
     <fragment android:id="@+id/clientsFragment" android:name="com.example.vitalii.yellowsjoblog.ClientsFragment"
-              android:label="Clients" tools:layout="@layout/fragment_clients"/>
+              android:label="Clients" tools:layout="@layout/fragment_clients">
+        <action android:id="@+id/action_clientsFragment_to_addClientFragment" app:destination="@id/addClientFragment"/>
+    </fragment>
     <fragment android:id="@+id/teamFragment" android:name="com.example.vitalii.yellowsjoblog.TeamFragment"
               android:label="Team" tools:layout="@layout/fragment_team"/>
     <activity android:id="@+id/loginActivity" android:name="com.example.vitalii.yellowsjoblog.LoginActivity"
               android:label="activity_login" tools:layout="@layout/activity_login"/>
+    <fragment android:id="@+id/addProjectFragment" android:name="com.example.vitalii.yellowsjoblog.AddProjectFragment"
+              android:label="New Project" tools:layout="@layout/fragment_add_project">
+        <action android:id="@+id/action_addProjectFragment_to_projectsFragment" app:destination="@id/projectsFragment"/>
+    </fragment>
+    <fragment android:id="@+id/addClientFragment" android:name="com.example.vitalii.yellowsjoblog.AddClientFragment"
+              android:label="New Client" tools:layout="@layout/fragment_add_client">
+        <action android:id="@+id/action_addClientFragment_to_clientsFragment" app:destination="@id/clientsFragment"/>
+    </fragment>
 </navigation>

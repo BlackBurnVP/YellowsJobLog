@@ -113,6 +113,6 @@ class Users {
     }
 }
 
-data class Token(val token:String)
+data class Token(val token:String, val username:String)
 
 data class AuthentificationData(val Username:String, val Password:String)

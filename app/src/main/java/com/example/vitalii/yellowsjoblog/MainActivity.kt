@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
+import android.view.Menu
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -41,13 +43,10 @@ class MainActivity : AppCompatActivity() {
         val headerView = mNavView.getHeaderView(0)
         val text:TextView = headerView.findViewById(R.id.txt_UserName)
 
-        text.text = sp.getString("EMAIL","")
+        text.text = sp.getString("currentUser","")
 
         NavigationUI.setupActionBarWithNavController(this,mNavController,mDrawerLayout)
         NavigationUI.setupWithNavController(mNavView,mNavController)
-
-        println(sp.getBoolean("logged",false))
-        println(sp.getString("EMAIL","email is empty"))
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -66,5 +65,4 @@ class MainActivity : AppCompatActivity() {
             currentFocus!!.clearFocus()
         }
     }
-
 }

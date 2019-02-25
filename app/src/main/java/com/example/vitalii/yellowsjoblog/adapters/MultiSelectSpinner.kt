@@ -201,11 +201,6 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
         val builder = AlertDialog.Builder(context)
         val builder2 = AlertDialog.Builder(context)
 
-        mOpenInitiated = true
-//        if (mListener != null) {
-//            mListener!!.onSpinnerOpened(this)
-//        }
-
         builder.setMultiChoiceItems(_itemsUsers, _selectionUsers, this)
         builder2.setMultiChoiceItems(_itemsProjects, _selectionProjects, this)
         if(_itemsUsers!=null){
@@ -214,7 +209,7 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
         if(_itemsProjects!=null){
             builder2.show()
         }
-        return super.performClick()
+        return true
     }
 
     /**
@@ -319,67 +314,67 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
 //        return sb.toString()
 //    }
 
-    interface OnSpinnerEventsListener {
-
-        /**
-         * Callback triggered when the spinner was opened.
-         */
-        fun onSpinnerOpened(spinner: MultiSelectSpinner)
-
-        /**
-         * Callback triggered when the spinner was closed.
-         */
-        fun onSpinnerClosed(spinner: MultiSelectSpinner)
-
-    }
-
-    private var mListener: OnSpinnerEventsListener? = null
-    private var mOpenInitiated = false
-
-    // implement the Spinner constructors that you need
-
-//    override fun performClick(): Boolean {
-//        // register that the Spinner was opened so we have a status
-//        // indicator for when the container holding this Spinner may lose focus
-//        mOpenInitiated = true
-//        if (mListener != null) {
-//            mListener!!.onSpinnerOpened(this)
-//        }
-//        return super.performClick()
+//    interface OnSpinnerEventsListener {
+//
+//        /**
+//         * Callback triggered when the spinner was opened.
+//         */
+//        fun onSpinnerOpened(spinner: MultiSelectSpinner)
+//
+//        /**
+//         * Callback triggered when the spinner was closed.
+//         */
+//        fun onSpinnerClosed(spinner: MultiSelectSpinner)
+//
 //    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        //if (hasBeenOpened() && hasFocus) {
-            performClosedEvent()
-        //}
-    }
-
-    /**
-     * Register the listener which will listen for events.
-     */
-    fun setSpinnerEventsListener(
-        onSpinnerEventsListener: OnSpinnerEventsListener
-    ) {
-        mListener = onSpinnerEventsListener
-    }
-
-    /**
-     * Propagate the closed Spinner event to the listener from outside if needed.
-     */
-    fun performClosedEvent() {
-        mOpenInitiated = false
-        println("closed")
-        if (mListener != null) {
-            mListener!!.onSpinnerClosed(this)
-        }
-    }
-
-    /**
-     * A boolean flag indicating that the Spinner triggered an open event.
-     *
-     * @return true for opened Spinner
-     */
-    fun hasBeenOpened(): Boolean {
-        return mOpenInitiated
-    }
+//
+//    private var mListener: OnSpinnerEventsListener? = null
+//    private var mOpenInitiated = false
+//
+//    // implement the Spinner constructors that you need
+//
+////    override fun performClick(): Boolean {
+////        // register that the Spinner was opened so we have a status
+////        // indicator for when the container holding this Spinner may lose focus
+////        mOpenInitiated = true
+////        if (mListener != null) {
+////            mListener!!.onSpinnerOpened(this)
+////        }
+////        return super.performClick()
+////    }
+//
+//    override fun onWindowFocusChanged(hasFocus: Boolean) {
+//        //if (hasBeenOpened() && hasFocus) {
+//            //performClosedEvent()
+//        //}
+//    }
+//
+//    /**
+//     * Register the listener which will listen for events.
+//     */
+//    fun setSpinnerEventsListener(
+//        onSpinnerEventsListener: OnSpinnerEventsListener
+//    ) {
+//        mListener = onSpinnerEventsListener
+//    }
+//
+//    /**
+//     * Propagate the closed Spinner event to the listener from outside if needed.
+//     */
+//    fun performClosedEvent() {
+//        mOpenInitiated = false
+//        println("closed")
+//        if (mListener != null) {
+//            mListener!!.onSpinnerClosed(this)
+//        }
+//    }
+//
+//    /**
+//     * A boolean flag indicating that the Spinner triggered an open event.
+//     *
+//     * @return true for opened Spinner
+//     */
+//    fun hasBeenOpened(): Boolean {
+//        return mOpenInitiated
+//    }
 }

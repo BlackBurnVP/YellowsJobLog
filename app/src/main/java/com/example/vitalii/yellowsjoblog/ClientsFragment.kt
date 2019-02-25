@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.Toast
+import androidx.navigation.findNavController
 import com.example.vitalii.yellowsjoblog.adapters.ClientsAdapter
 import com.example.vitalii.yellowsjoblog.api.Clients
 import com.example.vitalii.yellowsjoblog.api.AddClient
@@ -26,6 +25,7 @@ class ClientsFragment : Fragment() {
     private var client:MutableList<Clients> = ArrayList()
     private val adapter = ClientsAdapter(client)
     private val connect = ServerConnection()
+    private var token =""
 
     private lateinit var sp:SharedPreferences
     private lateinit var ed:SharedPreferences.Editor
@@ -36,6 +36,7 @@ class ClientsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_recycler, container, false)
+        setHasOptionsMenu(true)
 
         sp = context!!.getSharedPreferences("PREF_NAME",Context.MODE_PRIVATE)
         ed = sp.edit()
@@ -45,26 +46,10 @@ class ClientsFragment : Fragment() {
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter
 
-
         serverConnect()
 
-        val btn = view!!.findViewById<Button>(R.id.btnNewClient)
-        val token = sp.getString("token","")
+        token = sp.getString("token","")
 
-        btn.setOnClickListener {
-            connect.createService(token).newCLient(AddClient("someClient","RED")).enqueue(object : Callback<String>{
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    if (response.body()!= null){
-                        Toast.makeText(context!!,"SUCCESS",Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(context!!,"NULL BODY",Toast.LENGTH_SHORT).show()
-                    }
-                }
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    Toast.makeText(context!!,"FAILED",Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
         return view
     }
 
@@ -84,5 +69,14 @@ class ClientsFragment : Fragment() {
                 Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu,inflater)
+        inflater?.inflate(R.menu.add_new,menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        view!!.findNavController().navigate(R.id.action_clientsFragment_to_addClientFragment)
+        return super.onOptionsItemSelected(item)
     }
 }

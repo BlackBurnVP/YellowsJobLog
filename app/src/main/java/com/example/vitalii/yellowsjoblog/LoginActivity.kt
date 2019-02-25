@@ -95,9 +95,12 @@ LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity,"Successful response", Toast.LENGTH_SHORT).show()
                     println("Response IS ${response.body()!!.token}")
                     val token = response.body()!!.token
+                    val currentUser = response.body()!!.username
+                    ed.putString("currentUser",currentUser).apply()
                     ed.putString("token",token).apply()
                     ed.putBoolean("logged",true)
                     goToMain()
+                    finish()
                     if (response.body() == null){
                         Toast.makeText(this@LoginActivity,"Answer is null", Toast.LENGTH_SHORT).show()
                     }else{

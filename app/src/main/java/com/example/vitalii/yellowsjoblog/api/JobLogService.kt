@@ -26,6 +26,6 @@ interface JobLogService {
     @POST("api/clients/new")
     fun newCLient(@Body client:AddClient):Call<String>
 
-    @POST("api/clients/new")
-    fun newClientV2(@Body cl:ArrayList<Int>)
+    @POST("api/projects/new")
+    fun newProject(@Body project:AddProject):Call<String>
 }

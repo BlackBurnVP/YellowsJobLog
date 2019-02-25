@@ -21,6 +21,12 @@ class DashboardAdapter(private var reports:MutableList<Reports>? = ArrayList()) 
         holder.project.text = stat.projectName
         holder.timeFlow.text = "${stat.hourstart}-${stat.hourend}"
         holder.totalTime.text = stat.datestamp
+        if (stat.name!!.isEmpty()){
+            holder.workDesc.text = "No description"
+        }
+        if (stat.projectName == null){
+            holder.project.text = "No project"
+        }
     }
 
     override fun getItemCount(): Int {

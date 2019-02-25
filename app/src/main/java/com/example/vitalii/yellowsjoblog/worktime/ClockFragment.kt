@@ -74,11 +74,11 @@ class ClockFragment : Fragment(){
 
         spinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(activity!!,nameOfProjects[position],Toast.LENGTH_SHORT).show()
+                val selected = nameOfProjects[position]
+                Toast.makeText(activity!!,selected,Toast.LENGTH_SHORT).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }
 

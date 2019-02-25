@@ -22,8 +22,6 @@ class WorkTimeFragment : Fragment() {
         mViewPager.adapter = ViewPagerAdapter(childFragmentManager)
         mTabLayout = view.findViewById(R.id.tabLayout)
         mTabLayout.setupWithViewPager(mViewPager,true)
-//        mName = view!!.findViewById(R.id.view_name)
-//        mName.text = LoginActivity().email
         return view
     }
 
