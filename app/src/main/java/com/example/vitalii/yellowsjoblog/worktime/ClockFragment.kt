@@ -1,141 +1,101 @@
 package com.example.vitalii.yellowsjoblog.worktime
 
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.vitalii.yellowsjoblog.LoginActivity
 import com.example.vitalii.yellowsjoblog.MainActivity
 import com.example.vitalii.yellowsjoblog.R
-import com.example.vitalii.yellowsjoblog.api.Projects
-import com.example.vitalii.yellowsjoblog.api.ServerConnection
+import com.example.vitalii.yellowsjoblog.api.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 @Suppress("DEPRECATION")
+@SuppressLint("SimpleDateFormat")
 class ClockFragment : Fragment(){
 
-    private lateinit var start:Button
-    private lateinit var txtTime:TextView
+    private lateinit var btnStartEnd:Button
+    private lateinit var txtClock:TextView
     private val mHandler:Handler = Handler()
-    private var mRunnable:Runnable = Runnable {  }
+    private var mRunnable:Runnable = Runnable {}
     private lateinit var sp:SharedPreferences
     private lateinit var ed:SharedPreferences.Editor
-    private lateinit var spinner: Spinner
-    private lateinit var testRecycler:RecyclerView
-    private lateinit var workDesc:EditText
+    private lateinit var mProjectSpinner: Spinner
+    lateinit var edWorkDesc:EditText
     private lateinit var data:Date
-    private val strDateFormat = "HH:mm"
-    private val dateFormat = SimpleDateFormat(strDateFormat)
-    private var startTime:Long = 0
-    private var seconds = 0
+    private var seconds:Long = 0
     private var startRun = false
-    private var hours = 0
-    private var minutes = 0
-    private var secs = 0
-    private var stats:MutableList<RecyclerData> = ArrayList()
-    private var workDay:MutableList<RecyclerData> = ArrayList()
+    private var listOfProjects = ArrayList<String>()
+    private val connect = ServerConnection()
+    private var token:String = ""
 
+    var isStopped = false
 
-
+    @SuppressLint("CommitPrefEdits")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_clock, container, false)
 
         sp = context!!.getSharedPreferences("PREF_NAME",Context.MODE_PRIVATE)
         ed = sp.edit()
 
-        start = view!!.findViewById(R.id.button)
-        txtTime = view.findViewById(R.id.txt_clock)
-        spinner = view.findViewById(R.id.project_spinner)
-        testRecycler = view.findViewById(R.id.stats_recycler)
-        workDesc = view!!.findViewById(R.id.txt_work)
+        ed.putLong("SECONDS",0).apply()
+        token = sp.getString("token","")!!
 
-        stats = ArrayList()
+        btnStartEnd = view!!.findViewById(R.id.btnStartEnd)
+        txtClock = view.findViewById(R.id.txt_clock)
+        mProjectSpinner = view.findViewById(R.id.project_spinner)
+        edWorkDesc = view.findViewById(R.id.txt_work)
+
+        edWorkDesc.setText(sp.getString("taskName",""))
+
+        getProjects(token)
 
         MainActivity().loseFocus()
 
-        serverConnect()
-
-        val adapter = ArrayAdapter(activity!!,android.R.layout.simple_spinner_item,nameOfProjects)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
-
-        spinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selected = nameOfProjects[position]
-                Toast.makeText(activity!!,selected,Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
-
         onTimerStop()
         onTimerStart()
-
-        seconds = sp.getInt("SECONDS",0)
-
-//        startTime = sp.getLong("DATA(mills)",0L)
-//        if(startTime!=0L){
-//            val current = data.time
-//            val res = ((current-startTime)/1000).toInt()
-//            seconds = res
-//            println("TIMER WAS STARTED")
-//        }
-
-        if (seconds!=0){
-            startRun = true
-            start.text = getString(R.string.stop)
-        }
-        start.setOnClickListener(onClick)
+        btnStartEnd.setOnClickListener(onClick)
         return view
     }
 
+    /**
+     * Start/Stop timer button click
+     */
     val onClick = View.OnClickListener { view ->
-        stats = ArrayList()
-
+        val taskName = edWorkDesc.text.toString()
+        val project = mProjectSpinner.selectedItem.toString()
         if(!startRun){
+            // Start timer
             startRun = true
-            data = Date()
-            startTime = data.time
-            start.text = getString(R.string.stop)
-            ed.putLong("DATA(mills)",startTime).commit()
+            btnStartEnd.text = getString(R.string.stop)
+            addTask(token,taskName,project)
+            btnStartEnd.isEnabled = false
         };else{
-            //start.setOnLongClickListener {
-                val layoutManager = LinearLayoutManager(this.activity!!)
-                testRecycler.layoutManager = layoutManager
-                //val adapter = DashboardAdapter(stats)
-                //testRecycler.adapter = adapter
+            //Stop timer
+            btnStartEnd.setOnLongClickListener {
+                btnStartEnd.isEnabled = false
                 startRun = false
-            data = Date()
-            val current = dateFormat.format(data)
-            val flow = "${dateFormat.format(startTime)} - $current"
-                ed.putString("TOTAL_TIME", txtTime.text.toString())
-                workDay.add(RecyclerData(workDesc.text.toString(),spinner.selectedItem.toString(),txtTime.text.toString(),flow))
-                for (item in workDay){
-                    //stats.addAll(workDay)
-                    //adapter.updateRecycler(workDay)
-                }
-//                startTime = 0
-//                ed.putLong("DATA(Mills)",0L)
-                println(stats)
-                seconds = 0
-                ed.putInt("SECONDS",0).commit()
-                start.text = getString(R.string.start)
-              // true
-            //}
+                data = Date()
+                seconds = 0L
+                ed.putLong("SECONDS",0L).apply()
+                btnStartEnd.text = getString(R.string.start)
+                endTask(token,taskName,project)
+               true
+            }
         }
     }
 
@@ -143,23 +103,28 @@ class ClockFragment : Fragment(){
      * Starting Work Time Timer
      */
     private fun onTimerStart(){
-        sp = this.activity!!.getSharedPreferences("TIMER",Context.MODE_PRIVATE)
-        ed = sp.edit()
+        ed.putBoolean("thread", true).apply()
         mRunnable = Runnable {
-            hours = seconds/3600
-            minutes = (seconds%3600)/60
-            secs = (seconds%60)
+            seconds = sp.getLong("SECONDS",0)
+            try {
+                if (seconds!=0L){
+                    startRun = true
+                    btnStartEnd.text = getString(R.string.stop)
+                }
+            }catch (ex:Exception){}
+            val hours = seconds/3600
+            val minutes = (seconds%3600)/60
+            val secs = (seconds%60)
             val time = String.format("%d:%02d:%02d", hours, minutes, secs)
-            txtTime.text = time
+            txtClock.text = time
             if (startRun){
                 seconds++
-                ed.putInt("SECONDS",seconds).commit()
+                ed.putLong("SECONDS",seconds).apply()
             }
-            mHandler.postDelayed(mRunnable,1000)
+            if(!isStopped) mHandler.postDelayed(mRunnable,1000)
         }
         mHandler.postDelayed(mRunnable,1000)
     }
-
     /**
      * Stops Work Time Timer
      */
@@ -169,38 +134,53 @@ class ClockFragment : Fragment(){
     }
 
     /**
-     * OnClickListener for spinner
+     * Add new task
      */
+    private fun addTask(token: String, taskName:String,project:String){
+        val user = sp.getString("currentUser","")
+        connect.createService(token).newTask(AddTask(taskName,project,user!!)).enqueue(object :Callback<String>{
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                Toast.makeText(context!!,"Task added",Toast.LENGTH_SHORT).show()
+                btnStartEnd.isEnabled = true
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+            }
+        })
+    }
+    /**
+     * End current task
+     */
+    private fun endTask(token: String, taskName:String, project:String){
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val date = Date()
+        val endDate = dateFormat.format(date)
+        val username = sp.getString("currentUser","")
+        connect.createService(token).endTask(EndTask(taskName,endDate,project,username!!)).enqueue(object :Callback<String>{
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                Toast.makeText(context!!,"Task ended",Toast.LENGTH_SHORT).show()
+                btnStartEnd.isEnabled = true
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+            }
+        })
+        connect.createService(token).getDashboard(username).clone()
+    }
 
-//    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//        val item = nameOfProjects[position]
-//        Toast.makeText(activity!!,"Selected item is $item",Toast.LENGTH_SHORT).show()
-//    }
-//
-//    /**
-//     * OnNothingClick for spinner
-//     */
-//    override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//    }
-
-    private var responseSaveProjects:List<Projects>? = null
-    private var nameOfProjects = ArrayList<String>()
-    private val connect = ServerConnection()
-
-    private fun serverConnect(){
-
-        val token = sp.getString("token","")
-
-        connect.createService(token!!).getProjects()
+    /**
+     * Get list of projects from the server
+     */
+    private fun getProjects(token: String){
+        connect.createService(token).getProjects()
            .enqueue(object : Callback<List<Projects>> {
             override fun onResponse(call: Call<List<Projects>>, response: Response<List<Projects>>) {
                 if(response.body()!=null) {
-                    responseSaveProjects = response.body()!!
                     for (project in response.body()!!) {
-                        nameOfProjects.add(project.name!!)
+                        listOfProjects.add(project.name!!)
+                        fillSpinner(listOfProjects)
                     }
                 };else{
+                    val intent = Intent(context!!,LoginActivity::class.java)
+                    startActivity(intent)
                     Toast.makeText(activity!!,"Server answer is null", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -210,6 +190,11 @@ class ClockFragment : Fragment(){
         })
     }
 
+    private fun fillSpinner(list:ArrayList<String>){
+        val adapter = ArrayAdapter(activity!!,android.R.layout.simple_spinner_item,list)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mProjectSpinner.adapter = adapter
+    }
 //    fun getCurrentTimeUsingDate() {
 //        val date = Date()
 //        val strDateFormat = "HH:mm:ss"
@@ -224,4 +209,19 @@ class ClockFragment : Fragment(){
 //        mHandler.postDelayed(mRunnable,1000)
 //    }
 
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        onTimerStop()
+//    }
+
+    override fun onPause() {
+        super.onPause()
+        mHandler.removeCallbacksAndMessages(null)
+        isStopped = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isStopped = false
+    }
 }

@@ -12,7 +12,6 @@ class AuthenticationInterceptor(private val authToken:String): Interceptor {
 
         val builder = original.newBuilder()
             .header("Authorization", "Bearer $authToken")
-        println("AUTH TOKEN IS $authToken")
         val request = builder.build()
         return chain.proceed(request)
     }

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="3dp">
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="40dp"
+        android:background="@drawable/background_task">
 
     <TextView
-            android:text="Working on App"
+            android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/txt_Name"
@@ -22,7 +29,7 @@
             android:textColor="@android:color/black"
             app:layout_constraintEnd_toStartOf="@+id/txt_TimeFlow"/>
     <TextView
-            android:text="JobLog"
+            android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/txt_projectName"
@@ -36,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_Name"
             app:layout_constraintEnd_toStartOf="@+id/txt_TimeFlow"/>
     <TextView
-            android:text="11:40:23-12:30:23"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/txt_TimeFlow"
             android:layout_alignParentTop="true"
@@ -47,9 +54,10 @@
             android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            android:textAlignment="textEnd" android:textSize="16sp"/>
+            android:textAlignment="textEnd"
+            android:textSize="16sp"/>
     <TextView
-            android:text="8:00:00"
+            android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/txt_resTime"
             android:layout_toEndOf="@+id/txt_Name"
@@ -60,3 +68,4 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_TimeFlow"
             app:layout_constraintStart_toStartOf="@+id/txt_TimeFlow"/>
 </android.support.constraint.ConstraintLayout>
+</LinearLayout>

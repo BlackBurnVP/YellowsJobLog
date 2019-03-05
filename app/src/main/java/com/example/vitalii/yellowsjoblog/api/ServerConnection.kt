@@ -17,7 +17,7 @@ class ServerConnection {
     private val httpClient = OkHttpClient.Builder()
 
     private val logging = HttpLoggingInterceptor()
-        .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+        .setLevel(HttpLoggingInterceptor.Level.BASIC)
 
     fun createService(token:String):JobLogService{
         val authInterceptor = AuthenticationInterceptor(token)

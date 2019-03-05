@@ -28,4 +28,13 @@ interface JobLogService {
 
     @POST("api/projects/new")
     fun newProject(@Body project:AddProject):Call<String>
+
+    @POST("api/tasks/update")
+    fun endTask(@Body task:EndTask):Call<String>
+
+    @POST("api/tasks/new")
+    fun newTask(@Body task:AddTask):Call<String>
+
+    @POST("api/tasks/{id}/edit")
+    fun editTask(@Path("id") id:String, @Body task:UpdateTask):Call<String>
 }

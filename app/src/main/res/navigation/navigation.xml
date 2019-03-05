@@ -4,36 +4,82 @@
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation"
             app:startDestination="@id/workTimeFragment">
 
-    <fragment android:id="@+id/workTimeFragment"
-              android:name="com.example.vitalii.yellowsjoblog.worktime.WorkTimeFragment"
-              android:label="Dashboard" tools:layout="@layout/fragment_work_time">
+    <fragment
+            android:id="@+id/workTimeFragment"
+            android:name="com.example.vitalii.yellowsjoblog.worktime.WorkTimeFragment"
+            android:label="Dashboard" tools:layout="@layout/fragment_work_time">
     </fragment>
-    <fragment android:id="@+id/clockFragment" android:name="com.example.vitalii.yellowsjoblog.worktime.ClockFragment"
-              android:label="Timer" tools:layout="@layout/fragment_clock"/>
-    <fragment android:id="@+id/statsFragment" android:name="com.example.vitalii.yellowsjoblog.worktime.StatsFragment"
-              android:label="Statistic" tools:layout="@layout/fragment_stats"/>
-    <fragment android:id="@+id/reportsFragment" android:name="com.example.vitalii.yellowsjoblog.ReportsFragment"
-              android:label="Reports" tools:layout="@layout/fragment_reports">
+    <fragment
+            android:id="@+id/clockFragment"
+            android:name="com.example.vitalii.yellowsjoblog.worktime.ClockFragment"
+            android:label="Timer"
+            tools:layout="@layout/fragment_clock"/>
+    <fragment
+            android:id="@+id/reportsFragment"
+            android:name="com.example.vitalii.yellowsjoblog.ReportsFragment"
+            android:label="Reports"
+            tools:layout="@layout/fragment_reports">
     </fragment>
-    <fragment android:id="@+id/projectsFragment" android:name="com.example.vitalii.yellowsjoblog.ProjectsFragment"
-              android:label="Projects" tools:layout="@layout/fragment_projects">
-        <action android:id="@+id/action_projectsFragment_to_addProjectFragment"
+    <fragment
+            android:id="@+id/projectsFragment"
+            android:name="com.example.vitalii.yellowsjoblog.ProjectsFragment"
+            android:label="Projects"
+            tools:layout="@layout/fragment_recycler">
+        <action
+                android:id="@+id/action_projectsFragment_to_addProjectFragment"
                 app:destination="@id/addProjectFragment"/>
     </fragment>
-    <fragment android:id="@+id/clientsFragment" android:name="com.example.vitalii.yellowsjoblog.ClientsFragment"
-              android:label="Clients" tools:layout="@layout/fragment_clients">
-        <action android:id="@+id/action_clientsFragment_to_addClientFragment" app:destination="@id/addClientFragment"/>
+    <fragment
+            android:id="@+id/clientsFragment"
+            android:name="com.example.vitalii.yellowsjoblog.ClientsFragment"
+            android:label="Clients"
+            tools:layout="@layout/fragment_recycler">
+        <action
+                android:id="@+id/action_clientsFragment_to_addClientFragment"
+                app:destination="@id/addClientFragment"
+                app:popUpTo="@+id/clockFragment"/>
     </fragment>
-    <fragment android:id="@+id/teamFragment" android:name="com.example.vitalii.yellowsjoblog.TeamFragment"
-              android:label="Team" tools:layout="@layout/fragment_team"/>
-    <activity android:id="@+id/loginActivity" android:name="com.example.vitalii.yellowsjoblog.LoginActivity"
-              android:label="activity_login" tools:layout="@layout/activity_login"/>
-    <fragment android:id="@+id/addProjectFragment" android:name="com.example.vitalii.yellowsjoblog.AddProjectFragment"
-              android:label="New Project" tools:layout="@layout/fragment_add_project">
-        <action android:id="@+id/action_addProjectFragment_to_projectsFragment" app:destination="@id/projectsFragment"/>
+    <fragment
+            android:id="@+id/teamFragment"
+            android:name="com.example.vitalii.yellowsjoblog.TeamFragment"
+            android:label="Team"
+            tools:layout="@layout/fragment_recycler"/>
+    <activity
+            android:id="@+id/loginActivity"
+            android:name="com.example.vitalii.yellowsjoblog.LoginActivity"
+            android:label="activity_login"
+            tools:layout="@layout/activity_login"/>
+    <fragment
+            android:id="@+id/addProjectFragment"
+            android:name="com.example.vitalii.yellowsjoblog.AddProjectFragment"
+            android:label="New Project"
+            tools:layout="@layout/fragment_add_project">
+        <action
+                android:id="@+id/action_addProjectFragment_to_projectsFragment"
+                app:destination="@id/projectsFragment"/>
     </fragment>
-    <fragment android:id="@+id/addClientFragment" android:name="com.example.vitalii.yellowsjoblog.AddClientFragment"
-              android:label="New Client" tools:layout="@layout/fragment_add_client">
-        <action android:id="@+id/action_addClientFragment_to_clientsFragment" app:destination="@id/clientsFragment"/>
+    <fragment
+            android:id="@+id/addClientFragment"
+            android:name="com.example.vitalii.yellowsjoblog.AddClientFragment"
+            android:label="New Client"
+            tools:layout="@layout/fragment_add_client">
+        <action
+                android:id="@+id/action_addClientFragment_to_clientsFragment"
+                app:destination="@id/clientsFragment" app:popUpTo="@+id/clockFragment"/>
     </fragment>
+    <fragment
+            android:id="@+id/statsFragment"
+            android:name="com.example.vitalii.yellowsjoblog.worktime.StatsFragment"
+            android:label="StatsFragment"
+            tools:layout="@layout/fragment_recycler">
+    </fragment>
+    <fragment android:id="@+id/updateTaskFragment" android:name="com.example.vitalii.yellowsjoblog.UpdateTaskFragment"
+              android:label="Update Task" tools:layout="@layout/fragment_update_task">
+        <argument android:name="idTask" app:argType="integer"/>
+        <argument android:name="name" app:argType="string"/>
+        <argument android:name="start" app:argType="string"/>
+        <argument android:name="end" app:argType="string"/>
+        <argument android:name="project" app:argType="string"/>
+        <action android:id="@+id/action_updateTaskFragment_to_statsFragment" app:destination="@id/statsFragment"/>
+    </fragment><action android:id="@+id/action_global_updateTaskFragment" app:destination="@id/updateTaskFragment"/>
 </navigation>

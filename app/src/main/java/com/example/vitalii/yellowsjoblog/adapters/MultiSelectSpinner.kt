@@ -40,7 +40,9 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
         usersList = newList
         val nameOfUsers = ArrayList<String>()
         for(user in newList){
-            nameOfUsers.add(user.fullName!!)
+            if (user.fullName!=null){
+                nameOfUsers.add(user.fullName!!)
+            }
         }
         setUsers(nameOfUsers)
     }
@@ -120,24 +122,22 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
         if (_selectionUsers != null && which < _selectionUsers!!.size) {
             _selectionUsers!![which] = isChecked
             //var select: String? = null
-            println("Selected users $selectedUsers")
             if (selectedUsers.isNotEmpty()) {
                 if (usersList != null) {
                     for (user in usersList!!) {
                         val selectedUser = _itemsUsers!![which]
-                        if (selectedUser == user.fullName!!) {
-                            val userID: Int = user.id!!
-                            if (!usersListOfID.contains(userID)) {
-                                println("Add new user ID $userID in Array")
-                                usersListOfID.add(userID)
-                            }; else {
-                                println("userID $userID is already in Array. Remove.")
-                                usersListOfID.remove(userID)
+                        if (user.fullName!= null) {
+                            if (selectedUser == user.fullName!!) {
+                                val userID: Int = user.id!!
+                                if (!usersListOfID.contains(userID)) {
+                                    usersListOfID.add(userID)
+                                }; else {
+                                    usersListOfID.remove(userID)
+                                }
                             }
                         }
                     }
                 }
-                println("Selected users: $selectedUsers")
             };else{
                 usersListOfID.clear()
             }
@@ -145,31 +145,24 @@ class MultiSelectSpinner: Spinner, OnMultiChoiceClickListener{
             if (_selectionProjects != null && which < _selectionProjects!!.size) {
                 _selectionProjects!![which] = isChecked
                 if(selectedProjects.isNotEmpty()) {
-                    println("selected projects $selectedProjects")
                     if (projectsPOJOList != null) {
                         for (project in this.projectsPOJOList!!) {
                             val selectedProject = _itemsProjects!![which]
                             if (selectedProject == project.name!!) {
                                 val projectID = project.id!!
                                 if (!projectsListOfID.contains(projectID)) {
-                                    //println("Selected strings $selectedProject")
-                                    println("Add new project ID $projectID in Array")
                                     projectsListOfID.add(projectID)
                                     setSelection(which)
                                 }; else {
-                                    println("ID $projectID is already in Array. Remove.")
                                     projectsListOfID.remove(projectID)
                                 }
                             }
                         }
                     }
-                    println("Selected projects: $selectedProjects")
                 };else{
                     projectsListOfID.clear()
                 }
             }
-            println("Selected users IDs $usersListOfID")
-            println("Selected projects IDs $projectsListOfID")
 //            if (!isAnySelect())
 //                select = _title
 //            else

@@ -20,12 +20,6 @@ class ClientsAdapter(private var projects:MutableList<Clients>? = ArrayList()) :
         val tm = projects!![position]
         holder.clientName.text = tm.name
         holder.clientColor.setBackgroundColor(Color.parseColor(tm.color))
-//        holder.role.text = tm.role
-//        if(tm.isActive!!){
-//            holder.isActive.text = "Active"
-//        };else{
-//            holder.isActive.text = "Not Active"
-//        }
     }
 
     override fun getItemCount(): Int {
@@ -41,7 +35,5 @@ class ClientsAdapter(private var projects:MutableList<Clients>? = ArrayList()) :
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var clientName:TextView = itemView.findViewById(R.id.txtClientsName) as TextView
         var clientColor:View = itemView.findViewById(R.id.clientColor) as View
-        //var role:TextView = itemView.findViewById(R.id.txtRole) as TextView
-        //var isActive:TextView = itemView.findViewById(R.id.txtIsActive) as TextView
     }
 }

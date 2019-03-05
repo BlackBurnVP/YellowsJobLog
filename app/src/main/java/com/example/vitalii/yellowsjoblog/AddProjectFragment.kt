@@ -60,21 +60,6 @@ class AddProjectFragment : Fragment() {
                 usersArray.add(i)
             }
             addProject(projectName, selectedClient, usersArray)
-            //println(usersArray)
-        }
-
-        val adapter = ArrayAdapter<String>(activity!!,android.R.layout.simple_spinner_item,nameOfClients)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        mClientsSpinner.setAdapter(adapter)
-
-        mClientsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
-                val item = parent.getItemAtPosition(pos).toString()
-                Toast.makeText(activity!!,item,Toast.LENGTH_SHORT).show()
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
 //        mClientsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -99,7 +84,9 @@ class AddProjectFragment : Fragment() {
                 if(response.body()!=null){
                     val nameOfUsers = ArrayList<String>()
                     for (user in response.body()!!) {
-                        nameOfUsers.add(user.fullName!!)
+                        if (user.fullName!= null){
+                            nameOfUsers.add(user.fullName!!)
+                        }
                     }
                     mUsersSpinners.addUsers(response.body()!!)
                     ed.putStringSet("users",nameOfUsers.toMutableSet()).commit()
@@ -117,12 +104,12 @@ class AddProjectFragment : Fragment() {
 
     private fun clients(){
         val token = sp.getString("token","")
-
         connect.createService(token!!).getClients().enqueue(object : Callback<List<Clients>> {
             override fun onResponse(call: Call<List<Clients>>, response: Response<List<Clients>>) {
                 if(response.body()!=null){
                     for(client in response.body()!!){
                         nameOfClients.add(client.name!!)
+                        fillSpinner(nameOfClients)
                     }
                 };else{
                     Toast.makeText(activity!!,"Server answer is null", Toast.LENGTH_SHORT).show()
@@ -134,21 +121,36 @@ class AddProjectFragment : Fragment() {
         })
     }
 
-    private fun addProject(name:String, client:String, users:ArrayList<String>){
+    private fun addProject(name:String, client:String?, users:ArrayList<String>){
         val token = sp.getString("token","")
-        connect.createService(token!!).newProject(AddProject(name,client,users)).enqueue(object :Callback<String>{
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                if (response.body()!=null){
-                    Toast.makeText(activity!!,"OK",Toast.LENGTH_SHORT).show()
-                    view!!.findNavController().navigate(R.id.action_addProjectFragment_to_projectsFragment)
-                }else{
-                    Toast.makeText(activity!!,"ANSWER IS NULL",Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Toast.makeText(activity!!,"Something went wrong",Toast.LENGTH_SHORT).show()
-            }
-        })
+        when {
+            name=="" -> mProjectName.error = "It's required field"
+            client == null -> Toast("You have to choose client")
+            users.isEmpty() -> Toast("You have to choose users")
+            else -> connect.createService(token!!).newProject(AddProject(name, client, users))
+                .enqueue(object : Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        if (response.body() != null) {
+                            Toast.makeText(activity!!, "OK", Toast.LENGTH_SHORT).show()
+                            view!!.findNavController().navigate(R.id.action_addProjectFragment_to_projectsFragment)
+                        } else {
+                           Toast("ANSWER IS NULL")
+                        }
+                    }
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                       Toast("Something went wrong")
+                    }
+                })
+        }
     }
 
+    private fun fillSpinner(list:ArrayList<String>){
+        val adapter = ArrayAdapter<String>(activity!!,android.R.layout.simple_spinner_item,list)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mClientsSpinner.adapter = adapter
+    }
+
+    private fun Toast(msg:String){
+        Toast.makeText(context!!,msg,Toast.LENGTH_SHORT).show()
+    }
 }

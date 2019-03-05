@@ -7,4 +7,5 @@
     <color name="gradienTwo">#27ca69</color>
     <color name="page_indicator_default_color">#4d4d4d</color>
     <color name="page_indicator_selected_color">#5950e5</color>
+    <color name="gray">#aeaeae</color>
 </resources>

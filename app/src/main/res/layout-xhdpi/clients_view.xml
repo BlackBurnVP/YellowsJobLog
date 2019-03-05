@@ -3,13 +3,20 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="3dp">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_client">
         <TextView
                 android:id="@+id/txtClientsName"
                 android:layout_width="match_parent"
@@ -24,10 +31,5 @@
                 android:layout_weight="8"
                 android:layout_margin="3dp"/>
     </LinearLayout>
-    <View
-            android:id="@+id/viewDivider"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_weight="0"
-            android:background="@android:color/black"/>
+</LinearLayout>
 </LinearLayout>

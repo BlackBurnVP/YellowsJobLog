@@ -13,10 +13,20 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.example.vitalii.yellowsjoblog.api.Reports
 import com.example.vitalii.yellowsjoblog.api.ServerConnection
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,9 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sp: SharedPreferences
     private lateinit var ed: SharedPreferences.Editor
 
-    private val connect = ServerConnection()
-
-    @SuppressLint("NewApi")
+    @SuppressLint("NewApi", "CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,10 +51,12 @@ class MainActivity : AppCompatActivity() {
         val headerView = mNavView.getHeaderView(0)
         val text:TextView = headerView.findViewById(R.id.txt_UserName)
 
-        text.text = sp.getString("currentUser","")
+        text.text = sp.getString("currentUserName","")
 
         NavigationUI.setupActionBarWithNavController(this,mNavController,mDrawerLayout)
         NavigationUI.setupWithNavController(mNavView,mNavController)
+
+        //mNavController.addOnNavigatedListener{nc:NavController, nd:NavDestination}
     }
 
     override fun onSupportNavigateUp(): Boolean {

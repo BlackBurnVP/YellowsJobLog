@@ -19,12 +19,6 @@ class ProjectsAdapter(private var projects:MutableList<Projects>? = ArrayList())
         val tm = projects!![position]
         holder.projectName.text = tm.name
         holder.clientName.text = tm.client!!.get(position).name
-//        holder.role.text = tm.role
-//        if(tm.isActive!!){
-//            holder.isActive.text = "Active"
-//        };else{
-//            holder.isActive.text = "Not Active"
-//        }
     }
 
     override fun getItemCount(): Int {
@@ -40,7 +34,5 @@ class ProjectsAdapter(private var projects:MutableList<Projects>? = ArrayList())
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var projectName:TextView = itemView.findViewById(R.id.txtProjectName) as TextView
         var clientName:TextView = itemView.findViewById(R.id.txtClientName) as TextView
-        //var role:TextView = itemView.findViewById(R.id.txtRole) as TextView
-        //var isActive:TextView = itemView.findViewById(R.id.txtIsActive) as TextView
     }
 }

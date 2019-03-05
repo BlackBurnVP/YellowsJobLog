@@ -1,6 +1,7 @@
 package com.example.vitalii.yellowsjoblog
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -8,12 +9,10 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.Button
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.example.vitalii.yellowsjoblog.adapters.ClientsAdapter
 import com.example.vitalii.yellowsjoblog.api.Clients
-import com.example.vitalii.yellowsjoblog.api.AddClient
 import com.example.vitalii.yellowsjoblog.api.ServerConnection
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,11 +24,12 @@ class ClientsFragment : Fragment() {
     private var client:MutableList<Clients> = ArrayList()
     private val adapter = ClientsAdapter(client)
     private val connect = ServerConnection()
-    private var token =""
+    private var token = ""
 
     private lateinit var sp:SharedPreferences
     private lateinit var ed:SharedPreferences.Editor
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,14 +46,14 @@ class ClientsFragment : Fragment() {
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter
 
-        serverConnect()
+        getClients()
 
-        token = sp.getString("token","")
+        token = sp.getString("token","")!!
 
         return view
     }
 
-    private fun serverConnect(){
+    private fun getClients(){
 
         val token = sp.getString("token","")
         connect.createService(token!!).getClients().enqueue(object : Callback<List<Clients>> {

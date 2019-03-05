@@ -44,6 +44,7 @@ class ReportsFragment : Fragment() {
     private var date: String = ""
 
     private val dateAndTime = Calendar.getInstance()
+    @SuppressLint("SimpleDateFormat")
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     private var saveUsersList: MutableSet<String>? = null
@@ -53,6 +54,7 @@ class ReportsFragment : Fragment() {
     private val connect = ServerConnection()
     private lateinit var token: String
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_reports, container, false)
         setHasOptionsMenu(true)
@@ -67,10 +69,10 @@ class ReportsFragment : Fragment() {
 
         mButtonStartDate = view!!.findViewById(R.id.btnStartDate)
         mButtonStartDate.setOnClickListener(setDate)
-        mButtonEndDate = view!!.findViewById(R.id.btnEndDate)
+        mButtonEndDate = view.findViewById(R.id.btnEndDate)
         mButtonEndDate.setOnClickListener(setDate)
 
-        mRecycleView = view!!.findViewById(R.id.recycler_reports)
+        mRecycleView = view.findViewById(R.id.recycler_reports)
 
         val layoutManager = LinearLayoutManager(this.activity!!)
         mRecycleView.layoutManager = layoutManager
@@ -139,7 +141,6 @@ class ReportsFragment : Fragment() {
                 if (btn.id == R.id.btnStartDate) {
                     startDate = dateAndTime.timeInMillis
                     val startDateString = dateFormat.format(startDate)
-                    println(startDate!!)
                     setInitialDateTime(btn, startDateString!!)
                     date = "$startDateString+${mButtonEndDate.text}"
                     filter["date"] = date
@@ -150,7 +151,6 @@ class ReportsFragment : Fragment() {
                     when {
                         endDate!! < startDate!! -> {
                             Toast.makeText(activity!!, "You have to change end Date", Toast.LENGTH_SHORT).show()
-                            println("ERROR")
                         }
                         endDate!! > currentDate.time -> Toast.makeText(
                             activity!!,
@@ -169,8 +169,7 @@ class ReportsFragment : Fragment() {
             dateAndTime.get(Calendar.YEAR),
             dateAndTime.get(Calendar.MONTH),
             dateAndTime.get(Calendar.DAY_OF_MONTH)
-        )
-            .show()
+        ).show()
     }
 
     /**
@@ -254,7 +253,9 @@ class ReportsFragment : Fragment() {
                     if (response.body() != null) {
                         val nameOfUsers = ArrayList<String>()
                         for (user in response.body()!!) {
-                            nameOfUsers.add(user.fullName!!)
+                            if(user.fullName!= null){
+                                nameOfUsers.add(user.fullName!!)
+                            }
                         }
                         mUsersSpinner.addUsers(response.body()!!)
                         ed.putStringSet("users", nameOfUsers.toMutableSet()).commit()
@@ -268,6 +269,8 @@ class ReportsFragment : Fragment() {
                 }
             })
     }
+
+
 
     /**
      * Getting projects from server

@@ -9,7 +9,7 @@
 
     <ImageView
             android:layout_width="0dp"
-            android:layout_height="43dp"
+            android:layout_height="wrap_content"
             android:id="@+id/img_logo"
             android:layout_marginEnd="80dp"
             android:layout_marginRight="80dp"
@@ -26,55 +26,53 @@
             android:contentDescription="@string/joblog_logo"/>
     <Button
             android:text="@string/login"
-            android:layout_width="96dp"
-            android:layout_height="37dp"
+            android:layout_width="142dp"
+            android:layout_height="wrap_content"
             android:id="@+id/btn_login"
-            android:layout_marginEnd="130dp"
-            android:layout_marginRight="130dp"
-            android:layout_marginLeft="130dp"
-            android:layout_marginStart="130dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:onClick="onClick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.82"
+            app:layout_constraintVertical_bias="0.72"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="#727cf5"
             android:fontFamily="sans-serif"
             app:fontFamily="@font/nunito_sans"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:drawableStart="@drawable/ic_enter"
-            android:drawableLeft="@drawable/ic_enter"/>
+            android:drawableLeft="@drawable/ic_enter"
+            android:textSize="@dimen/textSize_xxxhdpi"
+            android:drawableStart="@drawable/ic_enter"/>
     <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:id="@+id/txt_login_layout"
+            android:layout_marginBottom="3dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.32"
+            app:layout_constraintHorizontal_bias="0.505"
             android:fontFamily="sans-serif"
-            app:fontFamily="@font/nunito_sans"
-            android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.328">
+            app:fontFamily="@font/nunito_sans" android:layout_marginLeft="40dp" android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" android:layout_marginRight="40dp">
 
         <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
-                android:id="@+id/txt_login" android:textSize="@dimen/textSize_hdpi"/>
+                android:id="@+id/txt_login" android:textSize="@dimen/textSize_xxxhdpi"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="8dp"
@@ -87,8 +85,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:fontFamily="sans-serif"
-            app:fontFamily="@font/nunito_sans"
-            app:layout_constraintVertical_bias="0.53">
+            app:fontFamily="@font/nunito_sans" app:layout_constraintVertical_bias="0.52">
 
         <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -96,6 +93,6 @@
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:id="@+id/txt_pass"
-                android:textSize="@dimen/textSize_hdpi"/>
+                android:textSize="@dimen/textSize_xxxhdpi"/>
     </android.support.design.widget.TextInputLayout>
 </android.support.constraint.ConstraintLayout>

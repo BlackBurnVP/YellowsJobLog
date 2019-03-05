@@ -1,5 +1,6 @@
 package com.example.vitalii.yellowsjoblog.worktime
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -10,25 +11,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.findNavController
 import com.example.vitalii.yellowsjoblog.R
+import com.example.vitalii.yellowsjoblog.adapters.ClickListener
 import com.example.vitalii.yellowsjoblog.adapters.DashboardAdapter
 import com.example.vitalii.yellowsjoblog.api.*
+import kotlinx.android.synthetic.main.fragment_clock.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class StatsFragment : Fragment() {
+class StatsFragment : Fragment(){
 
     private lateinit var mRecyclerView:RecyclerView
     private var stats:MutableList<Reports> = ArrayList()
-    private val adapter = DashboardAdapter(stats)
+    val adapter = DashboardAdapter(stats)
     private val connect = ServerConnection()
+    @SuppressLint("SimpleDateFormat")
+    private val dateFormat = SimpleDateFormat("HH:mm:ss")
 
     private lateinit var sp: SharedPreferences
     private lateinit var ed: SharedPreferences.Editor
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_recycler, container, false)
 
@@ -40,16 +49,40 @@ class StatsFragment : Fragment() {
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter
 
-        //getTasks()
+        getTasks()
         return view
     }
 
-    override fun onStart() {
-        getTasks()
-        super.onStart()
+    private fun recyclerClick(){
+        mRecyclerView = view!!.findViewById(R.id.recyclerView)
+        mRecyclerView.addOnItemTouchListener(ClickListener(activity!!, mRecyclerView, object : ClickListener.OnItemClickListener {
+            override fun onLongItemClick(v: View?, position: Int) {
+            }
+
+            override fun onItemClick(view: View, position: Int) {
+                val id = stats[position].id
+                val desc = stats[position].name
+                val project = stats[position].projectName
+                val dateStart = stats[position].dateStart
+                val dateEnd = stats[position].dateEnd
+                val timeStart = stats[position].hourStart
+                val timeEnd = stats[position].hourEnd
+
+                val args = Bundle()
+                args.putString("idTask",id.toString())
+                args.putString("name",desc)
+                args.putString("project",project)
+                args.putString("startDate",dateStart)
+                args.putString("endDate",dateEnd)
+                args.putString("startTime",timeStart)
+                args.putString("endTime",timeEnd)
+                args.putInt("position",position)
+                view.findNavController().navigate(R.id.action_global_updateTaskFragment,args)
+            }
+        }))
     }
 
-    private fun getTasks(){
+     private fun getTasks(){
 
         val token = sp.getString("token","")
         val user = sp.getString("currentUser","")
@@ -58,8 +91,24 @@ class StatsFragment : Fragment() {
             override fun onResponse(call: Call<List<Reports>>, response: Response<List<Reports>>) {
                 try {
                     adapter.updateRecycler(response.body()!!.toMutableList())
-                }catch (ex:Exception){}
 
+                    recyclerClick()
+                    val date = Date()
+                    val currentTime = dateFormat.format(date)
+                    val temp = dateFormat.parse(currentTime)
+                    val crll = temp.time
+                    var startTime = ""
+                    for (report in response.body()!!){
+                        if (report.hourEnd == null){
+                            startTime = report.hourStart!!
+                            break
+                        }
+                    }
+                    val tm = dateFormat.parse(startTime)
+                    val tml = tm.time
+                    val timer = (crll-tml)/1000
+                    ed.putLong("SECONDS",timer).apply()
+                }catch (ex:Exception){}
             }
             override fun onFailure(call: Call<List<Reports>>, t: Throwable) {
                 Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()

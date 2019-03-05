@@ -19,19 +19,13 @@ class ReportsAdapter(private var reports:MutableList<Reports>? = ArrayList()) : 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val report = reports!![position]
-        val data:String? = null
-        val parentID = report.id
         holder.txtName.text = report.user
         holder.txtDesc.text = report.name
-//            if(data == report.datestampstart || data == report.datestampend || data == report.projectName){
-//                holder.txtProject.setPadding(80,0,0,0)
-//                holder.txtDate.setPadding(80,0,0,0)
-//            }
 
         holder.txtProject.text = report.projectName
         holder.txtDate.text = report.date
-        holder.txtStart.text = report.hourstart
-        holder.txtEnd.text = report.hourend
+        holder.txtStart.text = report.hourStart
+        holder.txtEnd.text = report.hourEnd
         holder.txtTotal.text = report.datestamp
     }
 
@@ -54,6 +48,5 @@ class ReportsAdapter(private var reports:MutableList<Reports>? = ArrayList()) : 
         var txtStart:TextView = itemView.findViewById(R.id.txtStart) as TextView
         var txtEnd:TextView = itemView.findViewById(R.id.txtEnd) as TextView
         var txtTotal:TextView = itemView.findViewById(R.id.txtTotal) as TextView
-//        var totalTime:TextView = itemView.findViewById(R.id.txtTime) as TextView
     }
 }

@@ -1,6 +1,7 @@
 package com.example.vitalii.yellowsjoblog
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -33,6 +34,7 @@ class TeamFragment : Fragment() {
     private lateinit var sp: SharedPreferences
     private lateinit var ed: SharedPreferences.Editor
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,7 +71,9 @@ class TeamFragment : Fragment() {
                     responseSaveUsers = response.body()!!
                     val nameOfUsers = ArrayList<String>()
                     for(user in response.body()!!){
-                        nameOfUsers.add(user.fullName!!)
+                        if (user.fullName!= null){
+                            nameOfUsers.add(user.fullName!!)
+                        }
                     }
                     val usersID = ArrayList<Int>()
                     for (user in response.body()!!){
