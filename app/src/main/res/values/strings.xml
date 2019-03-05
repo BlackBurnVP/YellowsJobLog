@@ -31,6 +31,8 @@
     <string name="update">Update</string>
     <string name="client_name">Client name</string>
     <string name="add_client">Add client</string>
+    <string name="project_name">Project name</string>
+    <string name="add_project">Add project</string>
     <string-array name="colors_array">
         <item>Black</item>
         <item>Red</item>

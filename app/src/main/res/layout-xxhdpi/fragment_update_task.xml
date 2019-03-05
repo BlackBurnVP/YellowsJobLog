@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".UpdateTaskFragment">
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             tools:context=".UpdateTaskFragment">
 
     <EditText
             android:layout_width="0dp"
@@ -21,9 +21,9 @@
             android:layout_marginStart="15dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="15dp"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintVertical_bias="0.04"
-            android:hint="@string/what_are_u_workin_on"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.088"
+            android:hint="@string/what_are_u_workin_on" android:textSize="@dimen/textSize_xxhdpi"/>
     <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             android:layout_marginEnd="15dp" android:layout_marginRight="15dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="15dp"
             android:layout_marginStart="15dp" app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="0.188"/>
+            app:layout_constraintVertical_bias="0.305"/>
     <Button
             android:text="@string/date"
             android:layout_width="wrap_content"
@@ -43,8 +43,8 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.125"
-            app:layout_constraintVertical_bias="0.498"/>
+            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.169"
+            app:layout_constraintVertical_bias="0.513" android:textSize="@dimen/textSize_xxhdpi"/>
     <Button
             android:text="@string/date"
             android:layout_width="wrap_content"
@@ -54,8 +54,8 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.842"
-            app:layout_constraintVertical_bias="0.498"/>
+            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.84"
+            app:layout_constraintVertical_bias="0.515" android:textSize="@dimen/textSize_xxhdpi"/>
     <Button
             android:text="@string/update"
             android:layout_width="wrap_content"
@@ -65,5 +65,5 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.777"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginRight="8dp"
             android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="8dp"/>
+            android:layout_marginLeft="8dp" android:textSize="@dimen/textSize_xxhdpi"/>
 </android.support.constraint.ConstraintLayout>
