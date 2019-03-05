@@ -3,30 +3,18 @@ package com.example.vitalii.yellowsjoblog
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
-import android.view.Menu
-import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.example.vitalii.yellowsjoblog.api.Reports
-import com.example.vitalii.yellowsjoblog.api.ServerConnection
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,9 +42,23 @@ class MainActivity : AppCompatActivity() {
         text.text = sp.getString("currentUserName","")
 
         NavigationUI.setupActionBarWithNavController(this,mNavController,mDrawerLayout)
-        NavigationUI.setupWithNavController(mNavView,mNavController)
+//        NavigationUI.setupWithNavController(mNavView,mNavController)
 
-        //mNavController.addOnNavigatedListener{nc:NavController, nd:NavDestination}
+        mNavView.setNavigationItemSelectedListener { menuItem ->
+            mDrawerLayout.closeDrawers()
+            when(menuItem.itemId){
+                R.id.workTimeFragment -> mNavController.navigate(R.id.workTimeFragment)
+                R.id.reportsFragment -> mNavController.navigate(R.id.reportsFragment)
+                R.id.projectsFragment -> mNavController.navigate(R.id.projectsFragment)
+                R.id.clientsFragment -> mNavController.navigate(R.id.clientsFragment)
+                R.id.teamFragment -> mNavController.navigate(R.id.teamFragment)
+                R.id.signOut -> {
+                    val intent = Intent(this,LoginActivity::class.java)
+                    startActivity(intent)
+                    ed.putBoolean("logged",false).apply()
+                }
+            };true
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -75,4 +77,5 @@ class MainActivity : AppCompatActivity() {
             currentFocus!!.clearFocus()
         }
     }
+
 }

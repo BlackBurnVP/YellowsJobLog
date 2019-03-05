@@ -181,6 +181,7 @@ class ClockFragment : Fragment(){
                 };else{
                     val intent = Intent(context!!,LoginActivity::class.java)
                     startActivity(intent)
+                    ed.putBoolean("logged",false).apply()
                     Toast.makeText(activity!!,"Server answer is null", Toast.LENGTH_SHORT).show()
                 }
             }

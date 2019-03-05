@@ -171,7 +171,12 @@ class UpdateTaskFragment : Fragment() {
             val adapter = ArrayAdapter(activity!!,android.R.layout.simple_spinner_item,list)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             mProjectSpinner.adapter = adapter
-            mProjectSpinner.setSelection(arguments?.getInt("position")!!)
+            for (i in list){
+                if (i == arguments?.getString("project")){
+                    mProjectSpinner.setSelection(adapter.getPosition(i))
+                    break
+                }
+            }
         }catch (ex:Exception){}
     }
 }

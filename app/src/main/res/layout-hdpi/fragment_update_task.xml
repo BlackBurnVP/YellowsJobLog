@@ -8,7 +8,7 @@
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/edWorkDesc"
             android:layout_marginTop="8dp"
@@ -24,6 +24,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintVertical_bias="0.081"
             android:hint="@string/what_are_u_workin_on" android:textSize="@dimen/textSize_hdpi"/>
+
     <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"

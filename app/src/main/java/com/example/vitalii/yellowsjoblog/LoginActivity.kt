@@ -1,5 +1,6 @@
 package com.example.vitalii.yellowsjoblog
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -37,6 +38,7 @@ LoginActivity : AppCompatActivity() {
 
     private val connect = ServerConnection()
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -44,7 +46,7 @@ LoginActivity : AppCompatActivity() {
         ed = sp.edit()
         txtLogin = findViewById(R.id.txt_login)
         txtPassword = findViewById(R.id.txt_pass)
-        ed.putBoolean("logged",false).apply()
+//        ed.putBoolean("logged",false).apply()
         if(sp.getBoolean("logged",false)){
             goToMain()
         }
@@ -99,7 +101,7 @@ LoginActivity : AppCompatActivity() {
                         ed.putString("currentUser",response.body()!!.id).apply()
                         ed.putString("currentUserName",response.body()!!.username).apply()
                         ed.putString("token",response.body()!!.token).apply()
-                        ed.putBoolean("logged",true)
+                        ed.putBoolean("logged",true).apply()
 //                        finish()
                         goToMain()
                     }else{
