@@ -111,7 +111,7 @@ class StatsFragment : Fragment(){
                 }catch (ex:Exception){}
             }
             override fun onFailure(call: Call<List<Reports>>, t: Throwable) {
-                Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity!!, "Server not responding!", Toast.LENGTH_SHORT).show()
             }
         })
     }

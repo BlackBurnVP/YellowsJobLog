@@ -135,6 +135,9 @@ class ClockFragment : Fragment(){
 
     /**
      * Add new task
+     * @param token Bearer token
+     * @param taskName String description of work
+     * @param project String name of project
      */
     private fun addTask(token: String, taskName:String,project:String){
         val user = sp.getString("currentUser","")
@@ -186,7 +189,7 @@ class ClockFragment : Fragment(){
                 }
             }
             override fun onFailure(call: Call<List<Projects>>, t: Throwable) {
-                Toast.makeText(activity!!, "Server doesn't responding!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity!!, "Server not responding!", Toast.LENGTH_SHORT).show()
             }
         })
     }

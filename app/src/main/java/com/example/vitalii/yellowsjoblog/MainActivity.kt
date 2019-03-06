@@ -77,5 +77,4 @@ class MainActivity : AppCompatActivity() {
             currentFocus!!.clearFocus()
         }
     }
-
 }
