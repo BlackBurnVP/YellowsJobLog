@@ -39,7 +39,7 @@
             android:id="@+id/btnStartEnd"
             android:fontFamily="sans-serif"
             app:fontFamily="@font/nunito_sans"
-            android:background="@drawable/background_button_timer"
+            android:background="@drawable/background_button"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="@+id/txt_clock"

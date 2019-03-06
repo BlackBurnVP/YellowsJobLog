@@ -40,5 +40,6 @@
             android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp" android:textSize="@dimen/textSize_xxhdpi"
-            app:layout_constraintHorizontal_bias="0.498" app:layout_constraintVertical_bias="0.706"/>
+            app:layout_constraintHorizontal_bias="0.498" app:layout_constraintVertical_bias="0.706"
+            android:background="@drawable/background_button" android:textColor="@android:color/white"/>
 </android.support.constraint.ConstraintLayout>

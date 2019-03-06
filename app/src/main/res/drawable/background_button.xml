@@ -5,6 +5,10 @@
         <shape>
             <solid android:color="@color/gradienOne"/>
             <corners android:radius="20dp"/>
+            <padding android:right="5dp"
+                     android:bottom="5dp"
+                     android:left="5dp"
+                     android:top="5dp"/>
         </shape>
     </item>
 </selector>

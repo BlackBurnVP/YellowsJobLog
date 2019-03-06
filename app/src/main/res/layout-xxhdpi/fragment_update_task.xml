@@ -68,5 +68,6 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.777"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginRight="8dp"
             android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="8dp" android:textSize="@dimen/textSize_xxhdpi"/>
+            android:layout_marginLeft="8dp" android:textSize="@dimen/textSize_xxhdpi"
+            android:background="@drawable/background_button" android:textColor="@android:color/white"/>
 </android.support.constraint.ConstraintLayout>
