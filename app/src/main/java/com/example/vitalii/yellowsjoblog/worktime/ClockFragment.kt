@@ -80,19 +80,12 @@ class ClockFragment : Fragment(){
         val project = mProjectSpinner.selectedItem.toString()
         if(!startRun){
             // Start timer
-            startRun = true
-            btnStartEnd.text = getString(R.string.stop)
             addTask(token,taskName,project)
             btnStartEnd.isEnabled = false
         };else{
             //Stop timer
             btnStartEnd.setOnLongClickListener {
                 btnStartEnd.isEnabled = false
-                startRun = false
-                data = Date()
-                seconds = 0L
-                ed.putLong("SECONDS",0L).apply()
-                btnStartEnd.text = getString(R.string.start)
                 endTask(token,taskName,project)
                true
             }
@@ -145,8 +138,13 @@ class ClockFragment : Fragment(){
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 Toast.makeText(context!!,"Task added",Toast.LENGTH_SHORT).show()
                 btnStartEnd.isEnabled = true
+                startRun = true
+                btnStartEnd.text = getString(R.string.stop)
+                connect.createService(token).getDashboard(user).clone()
             }
             override fun onFailure(call: Call<String>, t: Throwable) {
+                Toast.makeText(context!!,"Server not responding. Please, try again later",Toast.LENGTH_SHORT).show()
+                btnStartEnd.isEnabled = true
             }
         })
     }
@@ -157,16 +155,23 @@ class ClockFragment : Fragment(){
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val date = Date()
         val endDate = dateFormat.format(date)
-        val username = sp.getString("currentUser","")
-        connect.createService(token).endTask(EndTask(taskName,endDate,project,username!!)).enqueue(object :Callback<String>{
+        val user = sp.getString("currentUser","")
+        connect.createService(token).endTask(EndTask(taskName,endDate,project,user!!)).enqueue(object :Callback<String>{
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 Toast.makeText(context!!,"Task ended",Toast.LENGTH_SHORT).show()
                 btnStartEnd.isEnabled = true
+                startRun = false
+                data = Date()
+                seconds = 0L
+                ed.putLong("SECONDS",0L).apply()
+                btnStartEnd.text = getString(R.string.start)
+                connect.createService(token).getDashboard(user).clone()
             }
             override fun onFailure(call: Call<String>, t: Throwable) {
+                Toast.makeText(context!!,"Server not responding. Please, try again later",Toast.LENGTH_SHORT).show()
+                btnStartEnd.isEnabled = true
             }
         })
-        connect.createService(token).getDashboard(username).clone()
     }
 
     /**
@@ -199,24 +204,6 @@ class ClockFragment : Fragment(){
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mProjectSpinner.adapter = adapter
     }
-//    fun getCurrentTimeUsingDate() {
-//        val date = Date()
-//        val strDateFormat = "HH:mm:ss"
-//        val dateFormat = SimpleDateFormat(strDateFormat)
-//        val formattedDate = dateFormat.format(date)
-//        println("Current time of the day using Date - 24 hour format: $formattedDate")
-//            mRunnable = Runnable{
-//                val current = startTime+60
-//                val newFormat = dateFormat.format(Date(current))
-//                mHandler.postDelayed(mRunnable,1000)
-//            }
-//        mHandler.postDelayed(mRunnable,1000)
-//    }
-
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        onTimerStop()
-//    }
 
     override fun onPause() {
         super.onPause()
