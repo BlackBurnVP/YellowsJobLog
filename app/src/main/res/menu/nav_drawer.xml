@@ -19,7 +19,7 @@
                       android:id="@+id/teamFragment"/>
                 <item android:title="Sign Out"
                       android:id="@+id/signOut"
-                />
+                      android:icon="@drawable/ic_exit"/>
             </group>
         </menu>
     </item>

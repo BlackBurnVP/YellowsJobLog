@@ -70,22 +70,31 @@ LoginActivity : AppCompatActivity() {
         return str.isEmpty()
     }
 
+//    fun onClick(View: View){
+//        sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+//        ed = sp.edit()
+//        if(isEmpty(txtLogin)){
+//            txtLogin.error = "Login is required"
+//        };else if (isEmpty(txtPassword)){
+//            txtPassword.error = "Password is required"
+//        };else if(!isEmail(txtLogin)){
+//            txtLogin.error = "Enter valid Email"
+//        }; else{
+//            email = txtLogin.text.toString()
+//            pass = txtPassword.text.toString()
+//            sendLogin(email,pass)
+//            ed.putString("EMAIL",email).apply()
+//        }
+//    }
+
     fun onClick(View: View){
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
         ed = sp.edit()
-        if(isEmpty(txtLogin)){
-            txtLogin.error = "Login is required"
-        };else if (isEmpty(txtPassword)){
-            txtPassword.error = "Password is required"
-        };else if(!isEmail(txtLogin)){
-            txtLogin.error = "Enter valid Email"
-        }; else{
-            email = txtLogin.text.toString()
-            pass = txtPassword.text.toString()
-            sendLogin(email,pass)
-//            sendLogin("vitalii.pshenychniuk@gmail.com","123415z")
-            ed.putString("EMAIL",email).apply()
-        }
+        email = txtLogin.text.toString()
+        pass = txtPassword.text.toString()
+        sendLogin("vitalii.pshenychniuk@yellows.eu","123415z")
+        ed.putString("EMAIL",email).apply()
+
     }
 
     /**

@@ -10,13 +10,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.example.vitalii.yellowsjoblog.R
 import com.example.vitalii.yellowsjoblog.adapters.ClickListener
 import com.example.vitalii.yellowsjoblog.adapters.DashboardAdapter
 import com.example.vitalii.yellowsjoblog.api.*
-import kotlinx.android.synthetic.main.fragment_clock.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +30,7 @@ class StatsFragment : Fragment(){
 
     private lateinit var mRecyclerView:RecyclerView
     private var stats:MutableList<Reports> = ArrayList()
-    val adapter = DashboardAdapter(stats)
+    private val adapter = DashboardAdapter(stats)
     private val connect = ServerConnection()
     @SuppressLint("SimpleDateFormat")
     private val dateFormat = SimpleDateFormat("HH:mm:ss")
@@ -89,24 +90,27 @@ class StatsFragment : Fragment(){
 
         connect.createService(token!!).getDashboard(user!!).enqueue(object : Callback<List<Reports>> {
             override fun onResponse(call: Call<List<Reports>>, response: Response<List<Reports>>) {
+                val workDesc = activity!!.findViewById<EditText>(R.id.txt_work)
+                val projectSpin = activity!!.findViewById<Spinner>(R.id.project_spinner)
                 try {
                     adapter.updateRecycler(response.body()!!.toMutableList())
-
                     recyclerClick()
-                    val date = Date()
-                    val currentTime = dateFormat.format(date)
-                    val temp = dateFormat.parse(currentTime)
-                    val crll = temp.time
+                    val currentTime = dateFormat.parse(dateFormat.format(Date())).time
                     var startTime = ""
                     for (report in response.body()!!){
                         if (report.hourEnd == null){
                             startTime = report.hourStart!!
+                            if (report.name!=null) {
+                                workDesc.setText(report.name!!)
+                            }else{
+                                workDesc.setText("No description")
+                            }
+                            ed.putString("currentProject",report.projectName!!).apply()
                             break
                         }
                     }
-                    val tm = dateFormat.parse(startTime)
-                    val tml = tm.time
-                    val timer = (crll-tml)/1000
+                    val tml = dateFormat.parse(startTime).time
+                    val timer = (currentTime-tml)/1000
                     ed.putLong("SECONDS",timer).apply()
                 }catch (ex:Exception){}
             }

@@ -2,6 +2,7 @@ package com.example.vitalii.yellowsjoblog
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -16,6 +17,8 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 
+
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout
@@ -25,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sp: SharedPreferences
     private lateinit var ed: SharedPreferences.Editor
 
-    @SuppressLint("NewApi", "CommitPrefEdits")
+    @SuppressLint("NewApi", "CommitPrefEdits", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,9 +40,12 @@ class MainActivity : AppCompatActivity() {
         mNavView = findViewById(R.id.nav_view)
         mNavController = this.findNavController(R.id.myNavHostFragment)
         val headerView = mNavView.getHeaderView(0)
-        val text:TextView = headerView.findViewById(R.id.txt_UserName)
+        val currentUser:TextView = headerView.findViewById(R.id.txt_UserName)
+        val currentVer:TextView = headerView.findViewById(R.id.txt_ver)
 
-        text.text = sp.getString("currentUserName","")
+        val pinfo = packageManager.getPackageInfo(packageName, 0)
+        currentVer.text = "V${pinfo.versionName}"
+        currentUser.text = sp.getString("currentUserName","")
 
         NavigationUI.setupActionBarWithNavController(this,mNavController,mDrawerLayout)
 //        NavigationUI.setupWithNavController(mNavView,mNavController)

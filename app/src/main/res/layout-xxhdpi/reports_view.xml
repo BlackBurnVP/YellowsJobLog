@@ -73,9 +73,5 @@
                 android:background="@android:color/white" android:layout_margin="3dp"
                 android:textSize="@dimen/textSize_xxhdpi"/>
     </LinearLayout>
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp" android:id="@+id/view" android:layout_weight="0"
-            android:background="@android:color/black"/>
 </LinearLayout>
 </LinearLayout>

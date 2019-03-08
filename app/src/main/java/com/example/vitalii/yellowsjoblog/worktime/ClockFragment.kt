@@ -36,7 +36,6 @@ class ClockFragment : Fragment(){
     private lateinit var ed:SharedPreferences.Editor
     private lateinit var mProjectSpinner: Spinner
     lateinit var edWorkDesc:EditText
-    private lateinit var data:Date
     private var seconds:Long = 0
     private var startRun = false
     private var listOfProjects = ArrayList<String>()
@@ -60,7 +59,7 @@ class ClockFragment : Fragment(){
         mProjectSpinner = view.findViewById(R.id.project_spinner)
         edWorkDesc = view.findViewById(R.id.txt_work)
 
-        edWorkDesc.setText(sp.getString("taskName",""))
+//        edWorkDesc.setText(sp.getString("taskName",""))
 
         getProjects(token)
 
@@ -69,27 +68,30 @@ class ClockFragment : Fragment(){
         onTimerStop()
         onTimerStart()
         btnStartEnd.setOnClickListener(onClick)
+        btnStartEnd.setOnLongClickListener(onLongClick)
         return view
     }
 
     /**
      * Start/Stop timer button click
      */
-    val onClick = View.OnClickListener { view ->
+    private val onClick = View.OnClickListener { view ->
         val taskName = edWorkDesc.text.toString()
         val project = mProjectSpinner.selectedItem.toString()
-        if(!startRun){
+        if(!startRun) {
             // Start timer
-            addTask(token,taskName,project)
             btnStartEnd.isEnabled = false
-        };else{
-            //Stop timer
-            btnStartEnd.setOnLongClickListener {
-                btnStartEnd.isEnabled = false
-                endTask(token,taskName,project)
-               true
-            }
+            addTask(token, taskName, project)
         }
+    }
+    private val onLongClick = View.OnLongClickListener {
+        val taskName = edWorkDesc.text.toString()
+        val project = mProjectSpinner.selectedItem.toString()
+        if (startRun){
+            btnStartEnd.isEnabled = false
+            endTask(token,taskName,project)
+        }
+        true
     }
 
     /**
@@ -161,7 +163,6 @@ class ClockFragment : Fragment(){
                 Toast.makeText(context!!,"Task ended",Toast.LENGTH_SHORT).show()
                 btnStartEnd.isEnabled = true
                 startRun = false
-                data = Date()
                 seconds = 0L
                 ed.putLong("SECONDS",0L).apply()
                 btnStartEnd.text = getString(R.string.start)
@@ -187,9 +188,9 @@ class ClockFragment : Fragment(){
                         fillSpinner(listOfProjects)
                     }
                 };else{
+                    ed.putBoolean("logged",false).apply()
                     val intent = Intent(context!!,LoginActivity::class.java)
                     startActivity(intent)
-                    ed.putBoolean("logged",false).apply()
                     Toast.makeText(activity!!,"Server answer is null", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -203,6 +204,7 @@ class ClockFragment : Fragment(){
         val adapter = ArrayAdapter(activity!!,android.R.layout.simple_spinner_item,list)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mProjectSpinner.adapter = adapter
+        mProjectSpinner.setSelection(adapter.getPosition(sp.getString("currentProject","")))
     }
 
     override fun onPause() {
@@ -215,4 +217,6 @@ class ClockFragment : Fragment(){
         super.onResume()
         isStopped = false
     }
+
+
 }
