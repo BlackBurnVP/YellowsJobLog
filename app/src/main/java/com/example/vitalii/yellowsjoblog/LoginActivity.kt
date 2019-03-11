@@ -14,17 +14,12 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
-import com.example.vitalii.yellowsjoblog.api.JobLogService
 import com.example.vitalii.yellowsjoblog.api.ServerConnection
 import com.example.vitalii.yellowsjoblog.api.Token
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class
 LoginActivity : AppCompatActivity() {
@@ -46,9 +41,14 @@ LoginActivity : AppCompatActivity() {
         ed = sp.edit()
         txtLogin = findViewById(R.id.txt_login)
         txtPassword = findViewById(R.id.txt_pass)
-//        ed.putBoolean("logged",false).apply()
         if(sp.getBoolean("logged",false)){
             goToMain()
+        }
+        val pInfo = packageManager.getPackageInfo(packageName, 0)
+        if (pInfo.versionName.contains("test")){
+            btn_login.setOnClickListener(testClick)
+        }else{
+            btn_login.setOnClickListener(onClick)
         }
     }
 
@@ -70,31 +70,30 @@ LoginActivity : AppCompatActivity() {
         return str.isEmpty()
     }
 
-//    fun onClick(View: View){
-//        sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
-//        ed = sp.edit()
-//        if(isEmpty(txtLogin)){
-//            txtLogin.error = "Login is required"
-//        };else if (isEmpty(txtPassword)){
-//            txtPassword.error = "Password is required"
-//        };else if(!isEmail(txtLogin)){
-//            txtLogin.error = "Enter valid Email"
-//        }; else{
-//            email = txtLogin.text.toString()
-//            pass = txtPassword.text.toString()
-//            sendLogin(email,pass)
-//            ed.putString("EMAIL",email).apply()
-//        }
-//    }
+    val onClick = View.OnClickListener{
+        sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
+        ed = sp.edit()
+        if(isEmpty(txtLogin)){
+            txtLogin.error = "Login is required"
+        };else if (isEmpty(txtPassword)){
+            txtPassword.error = "Password is required"
+        };else if(!isEmail(txtLogin)){
+            txtLogin.error = "Enter valid Email"
+        }; else{
+            email = txtLogin.text.toString()
+            pass = txtPassword.text.toString()
+            sendLogin(email,pass)
+            ed.putString("EMAIL",email).apply()
+        }
+    }
 
-    fun onClick(View: View){
+    private val testClick = View.OnClickListener{
         sp = getSharedPreferences("PREF_NAME", Context.MODE_PRIVATE)
         ed = sp.edit()
         email = txtLogin.text.toString()
         pass = txtPassword.text.toString()
         sendLogin("vitalii.pshenychniuk@yellows.eu","123415z")
         ed.putString("EMAIL",email).apply()
-
     }
 
     /**

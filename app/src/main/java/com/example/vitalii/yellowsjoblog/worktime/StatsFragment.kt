@@ -91,7 +91,6 @@ class StatsFragment : Fragment(){
         connect.createService(token!!).getDashboard(user!!).enqueue(object : Callback<List<Reports>> {
             override fun onResponse(call: Call<List<Reports>>, response: Response<List<Reports>>) {
                 val workDesc = activity!!.findViewById<EditText>(R.id.txt_work)
-                val projectSpin = activity!!.findViewById<Spinner>(R.id.project_spinner)
                 try {
                     adapter.updateRecycler(response.body()!!.toMutableList())
                     recyclerClick()

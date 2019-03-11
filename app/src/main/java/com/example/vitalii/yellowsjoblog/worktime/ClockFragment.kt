@@ -26,7 +26,13 @@ import kotlin.collections.ArrayList
 
 @Suppress("DEPRECATION")
 @SuppressLint("SimpleDateFormat")
-class ClockFragment : Fragment(){
+class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener {
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        ed.putInt("selectedProject",position).apply()
+    }
 
     private lateinit var btnStartEnd:Button
     private lateinit var txtClock:TextView
@@ -98,7 +104,6 @@ class ClockFragment : Fragment(){
      * Starting Work Time Timer
      */
     private fun onTimerStart(){
-        ed.putBoolean("thread", true).apply()
         mRunnable = Runnable {
             seconds = sp.getLong("SECONDS",0)
             try {
@@ -143,6 +148,7 @@ class ClockFragment : Fragment(){
                 startRun = true
                 btnStartEnd.text = getString(R.string.stop)
                 connect.createService(token).getDashboard(user).clone()
+                ed.putString("currentProject",project).apply()
             }
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Toast.makeText(context!!,"Server not responding. Please, try again later",Toast.LENGTH_SHORT).show()
@@ -165,6 +171,7 @@ class ClockFragment : Fragment(){
                 startRun = false
                 seconds = 0L
                 ed.putLong("SECONDS",0L).apply()
+                ed.putString("currentProject",project).apply()
                 btnStartEnd.text = getString(R.string.start)
                 connect.createService(token).getDashboard(user).clone()
             }
@@ -185,8 +192,8 @@ class ClockFragment : Fragment(){
                 if(response.body()!=null) {
                     for (project in response.body()!!) {
                         listOfProjects.add(project.name!!)
-                        fillSpinner(listOfProjects)
                     }
+                    fillSpinner(listOfProjects)
                 };else{
                     ed.putBoolean("logged",false).apply()
                     val intent = Intent(context!!,LoginActivity::class.java)
@@ -201,10 +208,13 @@ class ClockFragment : Fragment(){
     }
 
     private fun fillSpinner(list:ArrayList<String>){
+        println("fill")
         val adapter = ArrayAdapter(activity!!,android.R.layout.simple_spinner_item,list)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mProjectSpinner.onItemSelectedListener = this
         mProjectSpinner.adapter = adapter
-        mProjectSpinner.setSelection(adapter.getPosition(sp.getString("currentProject","")))
+        val currentProject = sp.getString("currentProject","")
+        mProjectSpinner.setSelection(adapter.getPosition(currentProject))
     }
 
     override fun onPause() {
@@ -217,6 +227,4 @@ class ClockFragment : Fragment(){
         super.onResume()
         isStopped = false
     }
-
-
 }
