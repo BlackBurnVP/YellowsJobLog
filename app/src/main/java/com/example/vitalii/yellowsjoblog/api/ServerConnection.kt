@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ServerConnection {
 
     private val BASE_URL_DEV = "http://dev.joblog.yellows.pl/"
+    private val URL_DEV = "http://joblog.yellows.pl/"
     private val gsonConverter = GsonConverterFactory.create()
     private val httpClient = OkHttpClient.Builder()
 
@@ -26,8 +27,9 @@ class ServerConnection {
             .addInterceptor(authInterceptor)
             .addInterceptor(logging)
 
+
         val builder = Retrofit.Builder()
-            .baseUrl(BASE_URL_DEV)
+            .baseUrl(URL_DEV)
             .addConverterFactory(gsonConverter)
             .client(httpClient.build())
 
@@ -46,7 +48,7 @@ class ServerConnection {
             .addInterceptor(logging)
 
         val builder = Retrofit.Builder()
-            .baseUrl(BASE_URL_DEV)
+            .baseUrl(URL_DEV)
             .addConverterFactory(gsonConverter)
             .client(httpClient.build())
 

@@ -104,7 +104,7 @@ class StatsFragment : Fragment(){
                             }else{
                                 workDesc.setText("No description")
                             }
-                            ed.putString("currentProject",report.projectName!!).apply()
+                            ed.putString("currentProject",report.projectName).apply()
                             break
                         }
                     }

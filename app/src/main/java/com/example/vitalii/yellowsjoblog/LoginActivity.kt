@@ -92,7 +92,7 @@ LoginActivity : AppCompatActivity() {
         ed = sp.edit()
         email = txtLogin.text.toString()
         pass = txtPassword.text.toString()
-        sendLogin("vitalii.pshenychniuk@yellows.eu","123415z")
+        sendLogin("vitalii.pshenychniuk@gmail.com","123415z")
         ed.putString("EMAIL",email).apply()
     }
 
