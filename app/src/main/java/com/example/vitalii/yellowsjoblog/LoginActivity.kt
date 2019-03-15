@@ -45,6 +45,7 @@ LoginActivity : AppCompatActivity() {
             goToMain()
         }
         val pInfo = packageManager.getPackageInfo(packageName, 0)
+        txtVersion.text = pInfo.versionName
         if (pInfo.versionName.contains("test")){
             btn_login.setOnClickListener(testClick)
         }else{
