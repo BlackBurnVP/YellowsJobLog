@@ -88,6 +88,8 @@ class ClockFragment : Fragment(), AdapterView.OnItemSelectedListener {
             // Start timer
             btnStartEnd.isEnabled = false
             addTask(token, taskName, project)
+        }else{
+            Toast.makeText(activity,"Hold to stop timer",Toast.LENGTH_SHORT).show()
         }
     }
     private val onLongClick = View.OnLongClickListener {
