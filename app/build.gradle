@@ -12,7 +12,7 @@ android {
         applicationId "com.example.vitalii.yellowsjoblog"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
+        versionCode 3
         //TODO: Обновлять версию приложухи
         versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
